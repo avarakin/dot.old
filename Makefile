@@ -1,20 +1,17 @@
-#all: git astropi chrome joplin_pc
-       
-all:  tools dropbox rawtherapee freecad
+all: git astropi chrome joplin_pc tools dropbox rawtherapee freecad
 
 astropi:
-#	cd .. && git clone https://github.com/avarakin/AstroPiMaker4.git
-	$(MAKE) -C ../AstroPiMaker4 utils gnome-desktop syncthing
+	cd .. && git clone https://github.com/avarakin/AstroPiMaker4.git
+	$(MAKE) -C ../AstroPiMaker4 utils syncthing
 
 tools:
-	sudo apt -y install emacs keepassxc geeqie freecad zfsutils-linux gnome-shell-extension-suspend-button gnome-shell-extension-system-monitor alacarte
-	sudo snap install code --classic 
+	sudo apt -y install emacs keepassxc geeqie freecad zfsutils-linux gnome-shell-extension-system-monitor alacarte gnome-shell-extension-dash-to-panel
+	sudo snap install code --classic
 	sudo snap install gitkraken
 	sudo snap install arduino
 
 dropbox:
 	wget https://linux.dropbox.com/packages/ubuntu/dropbox_2020.03.04_amd64.deb && sudo dpkg -i dropbox_2020.03.04_amd64.deb
-
 
 freecad:
 	wget https://github.com/FreeCAD/FreeCAD/releases/download/0.18.4/FreeCAD_0.18-16146-Linux-Conda_Py3Qt5_glibc2.12-x86_64.AppImage
@@ -37,12 +34,8 @@ git:
 	git config --global user.name "Alex Varakin"
 	git config credential.helper 'cache --timeout=30000'
 
-
 chrome:
 	wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb && sudo dpkg -i google-chrome-stable_current_amd64.deb
 
-
 joplin_pc:
 	wget -O - https://raw.githubusercontent.com/laurent22/joplin/master/Joplin_install_and_update.sh | bash
-
-
