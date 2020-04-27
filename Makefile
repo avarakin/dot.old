@@ -1,11 +1,27 @@
-all: git astropi chrome joplin_pc tools dropbox rawtherapee freecad
+all: update  git astropi gnome chrome joplin_pc tools dropbox rawtherapee freecad bCNC
+
+update:
+	sudo apt update
+	sudo apt upgrade
+
+bCNC:
+	sudo apt install -y python3-pip python3
+	pip3 install --upgrade bCNC
+	ln -s ~/.local/bin/bCNC ~/
+	echo Use alacarte to create an icon to ~/bCNC
 
 astropi:
 	cd .. && git clone https://github.com/avarakin/AstroPiMaker4.git
 	$(MAKE) -C ../AstroPiMaker4 utils syncthing
 
+astro:
+	$(MAKE) -C ../AstroPiMaker4 indi_kstars ccdciel_skychart phd groups astrometry sample_startup
+
+gnome:
+	sudo apt -y install gnome-tweaks gnome-shell-extension-system-monitor alacarte gnome-shell-extension-dash-to-panel
+
 tools:
-	sudo apt -y install emacs keepassxc geeqie freecad zfsutils-linux gnome-shell-extension-system-monitor alacarte gnome-shell-extension-dash-to-panel
+	sudo apt -y install emacs gnucash keepassxc geeqie freecad zfsutils-linux
 	sudo snap install code --classic
 	sudo snap install gitkraken
 	sudo snap install arduino
