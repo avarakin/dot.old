@@ -7,10 +7,11 @@ astropi:
 	$(MAKE) -C ../AstroPiMaker4 utils gnome-desktop syncthing
 
 tools:
-	sudo apt -y install emacs keepassxc geeqie freecad zfsutils-linux gnome-shell-extension-suspend-button gnome-shell-extension-system-monitor alacarte
+	sudo apt -y install emacs keepassxc geeqie freecad zfsutils-linux gnome-shell-extension-suspend-button gnome-shell-extension-system-monitor alacarte gparted
 	sudo snap install code --classic 
 	sudo snap install gitkraken
-	sudo snap install arduino
+	sudo snap install arduino && sudo usermod -a -G dialout $(USER)
+	sudo apt -y install paprefs pulseaudio-module-raop
 
 dropbox:
 	wget https://linux.dropbox.com/packages/ubuntu/dropbox_2020.03.04_amd64.deb && sudo dpkg -i dropbox_2020.03.04_amd64.deb
@@ -44,5 +45,20 @@ chrome:
 
 joplin_pc:
 	wget -O - https://raw.githubusercontent.com/laurent22/joplin/master/Joplin_install_and_update.sh | bash
+
+
+WAKEUP=/lib/systemd/system/wakeup.service
+wakeup:
+	sudo sh -c "echo '[Unit]' > $(WAKEUP)"
+	sudo sh -c "echo 'Description=Disable wakeup on USB' >> $(WAKEUP)"
+	sudo sh -c "echo 'After=multi-user.target' >> $(WAKEUP)"
+	sudo sh -c "echo '[Service]'>> $(WAKEUP)"
+	sudo sh -c "echo 'Type=simple'>> $(WAKEUP)"
+	sudo sh -c "echo 'ExecStart=echo EHC1>/proc/acpi/wakeup;echo EHC2> /proc/acpi/wakeup;echo XHC>/proc/acpi/wakeup'>> $(WAKEUP)"
+	sudo sh -c "echo '[Install]'>> $(WAKEUP)"
+	sudo sh -c "echo 'WantedBy=multi-user.target'>> $(WAKEUP)"
+	sudo systemctl enable wakeup.service
+	sudo systemctl start wakeup.service
+
 
 
