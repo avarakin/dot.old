@@ -15,6 +15,7 @@ astropi:
 	$(MAKE) -C ../AstroPiMaker4 utils syncthing
 
 astro:
+	cd ../AstroPiMaker4 && git pull
 	$(MAKE) -C ../AstroPiMaker4 indi_kstars ccdciel_skychart phd groups astrometry sample_startup
 
 gnome:
