@@ -21,7 +21,7 @@ gnome:
 	sudo apt -y install gnome-tweaks gnome-shell-extension-system-monitor alacarte gnome-shell-extension-dash-to-panel
 
 tools:
-	sudo apt -y install emacs keepassxc geeqie freecad zfsutils-linux gnome-shell-extension-suspend-button gnome-shell-extension-system-monitor alacarte gparted
+	sudo apt -y install emacs keepassxc geeqie zfsutils-linux gnome-shell-extension-suspend-button gnome-shell-extension-system-monitor alacarte gparted
 	sudo snap install code --classic 
 	sudo snap install gitkraken
 	sudo snap install arduino && sudo usermod -a -G dialout $(USER)
@@ -36,11 +36,23 @@ freecad:
 	mkdir -p ~/FreeCAD
 	mv FreeCAD_0.18-16146-Linux-Conda_Py3Qt5_glibc2.12-x86_64.AppImage ~/FreeCAD/
 
+
+# not available in repositories yet. Snap package is very old
 #	sudo add-apt-repository ppa:freecad-maintainers/freecad-stable
 #	sudo add-apt-repository ppa:freecad-maintainers/freecad-daily
 #	sudo apt-get update
 #	sudo apt-get install freecad-daily freecad
 
+
+flatpack:
+	sudo apt install flatpak
+	sudo apt install gnome-software-plugin-flatpak
+	sudo flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+
+
+kill-tracker:
+	systemctl --user mask tracker-store.service tracker-miner-fs.service tracker-miner-rss.service tracker-extract.service tracker-miner-apps.service tracker-writeback.service
+	tracker reset --hard
 
 rawtherapee:
 	sudo add-apt-repository ppa:dhor/myway
@@ -56,8 +68,6 @@ chrome:
 
 joplin_pc:
 	wget -O - https://raw.githubusercontent.com/laurent22/joplin/master/Joplin_install_and_update.sh | bash
-<<<<<<< HEAD
-
 
 WAKEUP=/lib/systemd/system/wakeup.service
 wakeup:
@@ -73,6 +83,3 @@ wakeup:
 	sudo systemctl start wakeup.service
 
 
-
-=======
->>>>>>> 7c4095dffdba154c56a786f5a973cf02d3a1d1fc
