@@ -83,3 +83,12 @@ wakeup:
 	sudo systemctl start wakeup.service
 
 
+appimage:
+	sudo add-apt-repository ppa:appimagelauncher-team/stable
+	sudo apt update
+	sudo apt install appimagelauncher
+
+darktable:
+	sudo add-apt-repository ppa:pmjdebruijn/darktable-release
+	sudo apt update
+	sudo apt install darktable
