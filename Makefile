@@ -15,13 +15,14 @@ astropi:
 	$(MAKE) -C ../AstroPiMaker4 utils syncthing
 
 astro:
+	cd ../AstroPiMaker4 && git pull
 	$(MAKE) -C ../AstroPiMaker4 indi_kstars ccdciel_skychart phd groups astrometry sample_startup
 
 gnome:
 	sudo apt -y install gnome-tweaks gnome-shell-extension-system-monitor alacarte gnome-shell-extension-dash-to-panel
 
 tools:
-	sudo apt -y install emacs keepassxc geeqie zfsutils-linux gnome-shell-extension-suspend-button gnome-shell-extension-system-monitor alacarte gparted
+	sudo apt -y install emacs keepassxc geeqie zfsutils-linux gparted
 	sudo snap install code --classic 
 	sudo snap install gitkraken
 	sudo snap install arduino && sudo usermod -a -G dialout $(USER)
