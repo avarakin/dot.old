@@ -22,7 +22,7 @@ gnome:
 	sudo apt -y install gnome-tweaks gnome-shell-extension-system-monitor alacarte gnome-shell-extension-dash-to-panel
 
 tools:
-	sudo apt -y install emacs keepassxc geeqie zfsutils-linux gparted
+	sudo apt -y install emacs keepassxc geeqie zfsutils-linux gparted lm-sensors hddtemp psensor
 	sudo snap install code --classic 
 	sudo snap install gitkraken
 	sudo snap install arduino && sudo usermod -a -G dialout $(USER)
@@ -76,8 +76,10 @@ wakeup:
 	sudo sh -c "echo 'Description=Disable wakeup on USB' >> $(WAKEUP)"
 	sudo sh -c "echo 'After=multi-user.target' >> $(WAKEUP)"
 	sudo sh -c "echo '[Service]'>> $(WAKEUP)"
-	sudo sh -c "echo 'Type=simple'>> $(WAKEUP)"
-	sudo sh -c "echo 'ExecStart=echo EHC1>/proc/acpi/wakeup;echo EHC2> /proc/acpi/wakeup;echo XHC>/proc/acpi/wakeup'>> $(WAKEUP)"
+	sudo sh -c "echo 'Type=oneshot'>> $(WAKEUP)"
+	sudo sh -c "echo 'RemainAfterExit=yes'>> $(WAKEUP)"
+#	sudo sh -c "echo 'ExecStart=/bin/echo PTXH > /proc/acpi/wakeup'>> $(WAKEUP)"
+	sudo sh -c "echo 'ExecStart=/bin/sh -c \047/bin/echo PTXH > /proc/acpi/wakeup\047'>> $(WAKEUP)"
 	sudo sh -c "echo '[Install]'>> $(WAKEUP)"
 	sudo sh -c "echo 'WantedBy=multi-user.target'>> $(WAKEUP)"
 	sudo systemctl enable wakeup.service
