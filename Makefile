@@ -5,7 +5,7 @@ update:
 	sudo apt upgrade
 
 bCNC:
-	sudo apt install -y python3-pip python3
+	sudo apt install -y python3-pip python3 python3-tk alacarte
 	pip3 install --upgrade bCNC
 	ln -s ~/.local/bin/bCNC ~/
 	echo Use alacarte to create an icon to ~/bCNC
