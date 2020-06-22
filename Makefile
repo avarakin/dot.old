@@ -4,6 +4,16 @@ update:
 	sudo apt update
 	sudo apt upgrade
 
+
+UGS:
+	wget https://ugs.jfrog.io/ugs/UGS/nightly/ugs-platform-app-2.0-SNAPSHOT-pi.tar.gz
+	tar zxvf ugs-platform-app-2.0-SNAPSHOT-pi.tar.gz
+	sudo apt install alacarte openjdk-8-jdk
+	mv ugsplatform-pi ~/
+	echo "~/ugsplatform-pi/bin/ugsplatform --jdkhome /usr/lib/jvm/java-8-openjdk-armhf" > ~/UGS.sh
+	chmod 777 ~/UGS.sh
+
+
 bCNC:
 	sudo apt install -y python3-pip python3 python3-tk alacarte
 	pip3 install --upgrade bCNC
