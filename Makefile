@@ -21,6 +21,10 @@ astro:
 gnome:
 	sudo apt -y install gnome-tweaks gnome-shell-extension-system-monitor alacarte gnome-shell-extension-dash-to-panel
 
+cinnamon:
+	sudo add-apt-repository ppa:linuxmint-daily-build-team/daily-builds
+	sudo apt install cinnamon nemo-python
+
 tools:
 	sudo apt -y install emacs keepassxc geeqie zfsutils-linux gparted lm-sensors hddtemp psensor
 	sudo snap install code --classic 
