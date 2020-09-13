@@ -4,15 +4,34 @@ update:
 	sudo apt update
 	sudo apt upgrade
 
+UGS:
+	sudo apt install alacarte openjdk-8-jdk
+	wget https://ugs.jfrog.io/ugs/UGS/nightly/ugs-platform-app-2.0-SNAPSHOT-linux.tar.gz
+	tar zxvf ugs-platform-app-2.0-SNAPSHOT-linux.tar.gz
+	mv ugsplatform-linux ~/
+	echo "~/ugsplatform-linux/bin/ugsplatform --jdkhome /usr/lib/jvm/java-8-openjdk-amd64" > ~/UGS.sh
+	chmod 777 ~/UGS.sh
+
+
+UGS_pi:
+	wget https://ugs.jfrog.io/ugs/UGS/nightly/ugs-platform-app-2.0-SNAPSHOT-pi.tar.gz
+
+	tar zxvf ugs-platform-app-2.0-SNAPSHOT-pi.tar.gz
+	sudo apt install alacarte openjdk-8-jdk
+	mv ugsplatform-pi ~/
+	echo "~/ugsplatform-pi/bin/ugsplatform --jdkhome /usr/lib/jvm/java-8-openjdk-armhf" > ~/UGS.sh
+	chmod 777 ~/UGS.sh
+
+
 bCNC:
-	sudo apt install -y python3-pip python3
+	sudo apt install -y python3-pip python3 python3-tk alacarte
 	pip3 install --upgrade bCNC
 	ln -s ~/.local/bin/bCNC ~/
 	echo Use alacarte to create an icon to ~/bCNC
 
 astropi:
 	cd .. && git clone https://github.com/avarakin/AstroPiMaker4.git
-	$(MAKE) -C ../AstroPiMaker4 utils syncthing
+	$(MAKE) -C ../AstroPiMaker4 utils syncthing vnc groups
 
 astro:
 	cd ../AstroPiMaker4 && git pull
