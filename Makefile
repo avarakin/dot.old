@@ -109,6 +109,16 @@ wakeup:
 	sudo systemctl start wakeup.service
 
 
+flutter:
+	sudo snap install flutter --classic
+	flutter
+	flutter channel dev
+	flutter upgrade
+	flutter config --enable-linux-desktop
+	flutter devices
+	flutter doctor
+
+
 appimage:
 	sudo add-apt-repository ppa:appimagelauncher-team/stable
 	sudo apt update
