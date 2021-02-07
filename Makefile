@@ -1,4 +1,8 @@
-all: update  git astropi gnome chrome joplin_pc tools dropbox rawtherapee freecad bCNC
+all: update  git astropi gnome chrome joplin_pc tools dropbox rawtherapee freecad bCNC scripts
+
+
+scripts:
+	cp resize_for_CN ~/.local/share/nemo/scripts
 
 update:
 	sudo apt update
