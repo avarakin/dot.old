@@ -1,4 +1,4 @@
-all: update  git astropi gnome chrome joplin_pc tools dropbox rawtherapee freecad bCNC
+all: update  git astropi gnome chrome joplin_pc tools dropbox rawtherapee freecad appimage bCNC
 
 update:
 	sudo apt update
@@ -31,11 +31,12 @@ tools:
 dropbox:
 	wget https://linux.dropbox.com/packages/ubuntu/dropbox_2020.03.04_amd64.deb && sudo dpkg -i dropbox_2020.03.04_amd64.deb
 
-freecad:
+freecad: appimage
 	wget https://github.com/FreeCAD/FreeCAD/releases/download/0.18.4/FreeCAD_0.18-16146-Linux-Conda_Py3Qt5_glibc2.12-x86_64.AppImage
 	chmod 777 FreeCAD_0.18-16146-Linux-Conda_Py3Qt5_glibc2.12-x86_64.AppImage
-	mkdir -p ~/FreeCAD
-	mv FreeCAD_0.18-16146-Linux-Conda_Py3Qt5_glibc2.12-x86_64.AppImage ~/FreeCAD/
+	echo Use appimagelauncher 
+#	mkdir -p ~/FreeCAD
+#	mv FreeCAD_0.18-16146-Linux-Conda_Py3Qt5_glibc2.12-x86_64.AppImage ~/FreeCAD/
 
 
 # not available in repositories yet. Snap package is very old
@@ -89,9 +90,9 @@ wakeup:
 appimage:
 	sudo add-apt-repository ppa:appimagelauncher-team/stable
 	sudo apt update
-	sudo apt install appimagelauncher
+	sudo apt -y install appimagelauncher
 
 darktable:
 	sudo add-apt-repository ppa:pmjdebruijn/darktable-release
 	sudo apt update
-	sudo apt install darktable
+	sudo apt -y install darktable
