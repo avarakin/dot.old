@@ -1,8 +1,30 @@
-all: update  git astropi gnome chrome joplin_pc tools dropbox rawtherapee freecad appimage bCNC
+all: update  git astropi gnome chrome joplin_pc tools dropbox rawtherapee freecad appimage bCNC scripts
+
+scripts:
+	cp resize_for_CN ~/.local/share/nemo/scripts
 
 update:
 	sudo apt update
 	sudo apt upgrade
+
+UGS:
+	sudo apt install alacarte openjdk-8-jdk
+	wget https://ugs.jfrog.io/ugs/UGS/nightly/ugs-platform-app-2.0-SNAPSHOT-linux.tar.gz
+	tar zxvf ugs-platform-app-2.0-SNAPSHOT-linux.tar.gz
+	mv ugsplatform-linux ~/
+	echo "~/ugsplatform-linux/bin/ugsplatform --jdkhome /usr/lib/jvm/java-8-openjdk-amd64" > ~/UGS.sh
+	chmod 777 ~/UGS.sh
+
+
+UGS_pi:
+	wget https://ugs.jfrog.io/ugs/UGS/nightly/ugs-platform-app-2.0-SNAPSHOT-pi.tar.gz
+
+	tar zxvf ugs-platform-app-2.0-SNAPSHOT-pi.tar.gz
+	sudo apt install alacarte openjdk-8-jdk
+	mv ugsplatform-pi ~/
+	echo "~/ugsplatform-pi/bin/ugsplatform --jdkhome /usr/lib/jvm/java-8-openjdk-armhf" > ~/UGS.sh
+	chmod 777 ~/UGS.sh
+
 
 bCNC:
 	sudo apt install -y python3-pip python3 python3-tk alacarte
@@ -12,7 +34,7 @@ bCNC:
 
 astropi:
 	cd .. && git clone https://github.com/avarakin/AstroPiMaker4.git
-	$(MAKE) -C ../AstroPiMaker4 utils syncthing
+	$(MAKE) -C ../AstroPiMaker4 utils syncthing vnc groups
 
 astro:
 	cd ../AstroPiMaker4 && git pull
@@ -20,6 +42,10 @@ astro:
 
 gnome:
 	sudo apt -y install gnome-tweaks gnome-shell-extension-system-monitor alacarte gnome-shell-extension-dash-to-panel
+
+cinnamon:
+	sudo add-apt-repository ppa:linuxmint-daily-build-team/daily-builds
+	sudo apt install cinnamon nemo-python
 
 tools:
 	sudo apt -y install emacs keepassxc geeqie zfsutils-linux gparted lm-sensors hddtemp psensor
@@ -85,6 +111,16 @@ wakeup:
 	sudo sh -c "echo 'WantedBy=multi-user.target'>> $(WAKEUP)"
 	sudo systemctl enable wakeup.service
 	sudo systemctl start wakeup.service
+
+
+flutter:
+	sudo snap install flutter --classic
+	flutter
+	flutter channel dev
+	flutter upgrade
+	flutter config --enable-linux-desktop
+	flutter devices
+	flutter doctor
 
 
 appimage:
