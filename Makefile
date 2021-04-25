@@ -1,5 +1,11 @@
 all: update  git astropi gnome chrome joplin_pc tools dropbox rawtherapee freecad appimage bCNC scripts
 
+
+mint: scripts astro
+	apt install -y remmina mc synaptic chromium vim terminator emacs keepassxc geeqie zfsutils-linux gparted lm-sensors hddtemp psensor mint-meta-codecs flameshot
+	flatpak install arduinoide
+
+
 scripts:
 	cp resize_for_CN ~/.local/share/nemo/scripts
 
@@ -38,7 +44,7 @@ astropi:
 
 astro:
 	cd ../AstroPiMaker4 && git pull
-	$(MAKE) -C ../AstroPiMaker4 indi_kstars ccdciel_skychart phd groups astrometry sample_startup
+	$(MAKE) -C ../AstroPiMaker4 indi kstars ccdciel skychart phd groups astrometry sample_startup
 
 gnome:
 	sudo apt -y install gnome-tweaks gnome-shell-extension-system-monitor alacarte gnome-shell-extension-dash-to-panel
@@ -57,8 +63,15 @@ tools:
 dropbox:
 	wget https://linux.dropbox.com/packages/ubuntu/dropbox_2020.03.04_amd64.deb && sudo dpkg -i dropbox_2020.03.04_amd64.deb
 
-freecad: appimage
-	wget https://github.com/FreeCAD/FreeCAD/releases/download/0.18.4/FreeCAD_0.18-16146-Linux-Conda_Py3Qt5_glibc2.12-x86_64.AppImage
+freecad: 
+	sudo add-apt-repository ppa:freecad-maintainers/freecad-daily
+	sudo add-apt-repository ppa:freecad-maintainers/freecad-stable
+	sudo apt-get update
+	sudo apt install freecad freecad-daily
+
+
+
+wget https://github.com/FreeCAD/FreeCAD/releases/download/0.18.4/FreeCAD_0.18-16146-Linux-Conda_Py3Qt5_glibc2.12-x86_64.AppImage
 	chmod 777 FreeCAD_0.18-16146-Linux-Conda_Py3Qt5_glibc2.12-x86_64.AppImage
 	echo Use appimagelauncher 
 #	mkdir -p ~/FreeCAD
