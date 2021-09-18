@@ -160,3 +160,13 @@ hass:
 	curl -Lo installer.sh https://raw.githubusercontent.com/home-assistant/supervised-installer/master/installer.sh
 	sudo bash installer.sh
 	echo It is recommended to reboot at this point
+
+hass-debian:
+	sudo apt update && sudo apt upgrade -y && sudo apt autoremove -y
+	sudo apt-get install -y software-properties-common apparmor-utils apt-transport-https ca-certificates curl dbus jq network-manager
+	sudo systemctl disable ModemManager
+	sudo systemctl stop ModemManager
+	curl -fsSL get.docker.com | sudo sh
+	curl -sL "https://raw.githubusercontent.com/Kanga-Who/home-assistant/master/supervised-installer.sh" | sudo bash -s
+	sudo apt install openssh-server -y
+
