@@ -1,8 +1,11 @@
 all: update  git astropi gnome chrome joplin_pc tools dropbox rawtherapee freecad appimage bCNC scripts
 
+hass: hass-debian coral-driver coral-test scripts chrome joplin_pc
 
-mint: scripts astro
-	apt install -y remmina mc synaptic chromium vim terminator emacs keepassxc geeqie zfsutils-linux gparted lm-sensors hddtemp psensor mint-meta-codecs flameshot
+utils:
+	sudo apt install remmina mc synaptic vim terminator emacs geeqie gparted lm-sensors hddtemp psensor flameshot openssh-server tilda -y
+
+mint: scripts astro utils
 	flatpak install arduinoide
 
 
@@ -146,21 +149,6 @@ darktable:
 	sudo apt update
 	sudo apt -y install darktable
 
-
-docker:
-	sudo apt update
-	sudo apt install -y apt-transport-https ca-certificates curl gnupg lsb-release software-properties-common
-	curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
-	echo "deb [arch=amd64 signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu  $$(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
-	sudo apt update
-	sudo apt install -y docker-ce docker-ce-cli containerd.io
-
-hass:
-	sudo apt install -y jq
-	curl -Lo installer.sh https://raw.githubusercontent.com/home-assistant/supervised-installer/master/installer.sh
-	sudo bash installer.sh
-	echo It is recommended to reboot at this point
-
 hass-debian:
 	sudo apt update && sudo apt upgrade -y && sudo apt autoremove -y
 	sudo apt-get install -y software-properties-common apparmor-utils apt-transport-https ca-certificates curl dbus jq network-manager
@@ -168,7 +156,6 @@ hass-debian:
 	sudo systemctl stop ModemManager
 	curl -fsSL get.docker.com | sudo sh
 	curl -sL "https://raw.githubusercontent.com/Kanga-Who/home-assistant/master/supervised-installer.sh" | sudo bash -s
-	sudo apt install openssh-server -y
 
 coral-driver:
 	echo "deb https://packages.cloud.google.com/apt coral-edgetpu-stable main" | sudo tee /etc/apt/sources.list.d/coral-edgetpu.list
