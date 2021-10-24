@@ -9,8 +9,6 @@ hass: hass-debian coral-driver coral-test scripts chrome joplin_pc
 utils:
 	sudo apt install remmina mc synaptic vim terminator emacs geeqie gparted lm-sensors hddtemp psensor flameshot openssh-server tilda -y
 
-mint: scripts astro utils
-	flatpak install arduinoide
 
 arduino:
 	cd /opt && sudo wget https://downloads.arduino.cc/arduino-1.8.16-linux64.tar.xz && sudo tar -xvf ./arduino-1.8.16-linux64.tar.xz && cd arduino-1.8.16/ && sudo ./install.sh
