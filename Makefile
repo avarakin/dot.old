@@ -12,6 +12,9 @@ utils:
 mint: scripts astro utils
 	flatpak install arduinoide
 
+arduino:
+	wget https://downloads.arduino.cc/arduino-1.8.16-linux64.tar.xz && tar -xvf ./arduino-1.8.16-linux64.tar.xz && cd arduino-1.8.16/ && sudo ./install.sh
+	rm -rf arduino-1.8.16/ arduino-1.8.16-linux64.tar.xz
 
 scripts:
 	cp resize_for_CN ~/.local/share/nemo/scripts
