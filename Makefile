@@ -75,6 +75,10 @@ freecad:
 	sudo apt-get update
 	sudo apt install freecad freecad-daily -y
 
+zerotier:
+	curl -s https://install.zerotier.com | sudo bash
+	sudo zerotier-cli join a09acf0233a897d8
+
 flatpack:
 	sudo apt install flatpak
 	sudo apt install gnome-software-plugin-flatpak
