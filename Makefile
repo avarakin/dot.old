@@ -72,7 +72,7 @@ freecad:
 	sudo add-apt-repository ppa:freecad-maintainers/freecad-daily
 	sudo add-apt-repository ppa:freecad-maintainers/freecad-stable
 	sudo apt-get update
-	sudo apt install freecad freecad-daily
+	sudo apt install freecad freecad-daily -y
 
 flatpack:
 	sudo apt install flatpak
