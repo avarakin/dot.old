@@ -1,4 +1,8 @@
-all: update  git astropi gnome chrome joplin_pc tools dropbox rawtherapee freecad appimage bCNC scripts
+all: update clock git chrome utils joplin_pc rawtherapee freecad scripts 
+
+clock:
+	timedatectl set-local-rtc 1 --adjust-system-clock
+
 
 hass: hass-debian coral-driver coral-test scripts chrome joplin_pc
 
@@ -14,7 +18,7 @@ scripts:
 
 update:
 	sudo apt update
-	sudo apt upgrade
+	sudo apt upgrade -y
 
 UGS:
 	sudo apt install alacarte openjdk-8-jdk
@@ -57,9 +61,7 @@ cinnamon:
 	sudo apt install cinnamon nemo-python
 
 tools:
-	sudo apt -y install emacs keepassxc geeqie zfsutils-linux gparted lm-sensors hddtemp psensor
-	sudo snap install code --classic 
-	sudo snap install gitkraken
+	sudo apt -y install emacs geeqie  gparted lm-sensors hddtemp psensor
 	sudo snap install arduino && sudo usermod -a -G dialout $(USER)
 	sudo apt -y install paprefs pulseaudio-module-raop
 
@@ -71,22 +73,6 @@ freecad:
 	sudo add-apt-repository ppa:freecad-maintainers/freecad-stable
 	sudo apt-get update
 	sudo apt install freecad freecad-daily
-
-
-
-wget https://github.com/FreeCAD/FreeCAD/releases/download/0.18.4/FreeCAD_0.18-16146-Linux-Conda_Py3Qt5_glibc2.12-x86_64.AppImage
-	chmod 777 FreeCAD_0.18-16146-Linux-Conda_Py3Qt5_glibc2.12-x86_64.AppImage
-	echo Use appimagelauncher 
-#	mkdir -p ~/FreeCAD
-#	mv FreeCAD_0.18-16146-Linux-Conda_Py3Qt5_glibc2.12-x86_64.AppImage ~/FreeCAD/
-
-
-# not available in repositories yet. Snap package is very old
-#	sudo add-apt-repository ppa:freecad-maintainers/freecad-stable
-#	sudo add-apt-repository ppa:freecad-maintainers/freecad-daily
-#	sudo apt-get update
-#	sudo apt-get install freecad-daily freecad
-
 
 flatpack:
 	sudo apt install flatpak
