@@ -1,5 +1,13 @@
 all: update clock git chrome utils joplin_pc rawtherapee freecad scripts 
 
+
+arch: scripts
+	sudo pacman -Syu
+	yay -S google-chrome joplin-desktop dropbox teams zoom
+	sudo pacman -S vim freecad kstars stellarium mc terminator geeqie flameshot emacs arduino code tilda rawtherapee syncthing
+
+
+
 clock:
 	timedatectl set-local-rtc 1 --adjust-system-clock
 
@@ -23,8 +31,8 @@ update:
 
 UGS:
 	sudo apt install alacarte openjdk-8-jdk
-	wget https://ugs.jfrog.io/ugs/UGS/nightly/ugs-platform-app-2.0-SNAPSHOT-linux.tar.gz
-	tar zxvf ugs-platform-app-2.0-SNAPSHOT-linux.tar.gz
+	wget https://ugs.jfrog.io/ui/native/UGS/v2.0.7/ugs-platform-app-linux.tar.gz
+	tar zxvf ugs-platform-app-linux.tar.gz
 	mv ugsplatform-linux ~/
 	echo "~/ugsplatform-linux/bin/ugsplatform --jdkhome /usr/lib/jvm/java-8-openjdk-amd64" > ~/UGS.sh
 	chmod 777 ~/UGS.sh
@@ -41,7 +49,7 @@ UGS_pi:
 
 
 bCNC:
-	sudo apt install -y python3-pip python3 python3-tk alacarte
+	sudo apt install -y python3-pip python3 python3-tk
 	pip3 install --upgrade bCNC
 	ln -s ~/.local/bin/bCNC ~/
 	echo Use alacarte to create an icon to ~/bCNC
