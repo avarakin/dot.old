@@ -8,7 +8,7 @@ arch-gnome:
 
 arch: scripts
 	sudo pacman -Syu
-	yay -S octopi google-chrome joplin-desktop dropbox teams zoom 
+	yay -S octopi ttf-envy-code-r google-chrome joplin-desktop dropbox teams zoom 
 	sudo pacman -S vim freecad kstars stellarium mc terminator geeqie flameshot emacs arduino code tilda rawtherapee syncthing
 
 
