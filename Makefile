@@ -1,11 +1,21 @@
 all: update clock git chrome utils joplin_pc rawtherapee freecad scripts 
 
 
+arch-gnome:
+	sudo pacman -S gnome gnome-tweaks 
+	yay -S gnome-shell-extension-arc-menu nome-shell-extension-dash-to-panel-git
+
+
 arch: scripts
 	sudo pacman -Syu
-	yay -S google-chrome joplin-desktop dropbox teams zoom
+	yay -S octopi google-chrome joplin-desktop dropbox teams zoom 
 	sudo pacman -S vim freecad kstars stellarium mc terminator geeqie flameshot emacs arduino code tilda rawtherapee syncthing
 
+
+powerlink:
+	touch "$HOME/.cache/zshhistory"
+	git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ~/powerlevel10k
+	echo 'source ~/powerlevel10k/powerlevel10k.zsh-theme' >> ~/.zshrc
 
 
 clock:
@@ -121,7 +131,7 @@ wakeup:
 	sudo sh -c "echo 'Type=oneshot'>> $(WAKEUP)"
 	sudo sh -c "echo 'RemainAfterExit=yes'>> $(WAKEUP)"
 #	sudo sh -c "echo 'ExecStart=/bin/echo PTXH > /proc/acpi/wakeup'>> $(WAKEUP)"
-	sudo sh -c "echo 'ExecStart=/bin/sh -c \047/bin/echo PTXH > /proc/acpi/wakeup\047'>> $(WAKEUP)"
+	sudo sh -c "echo 'ExecStart=/bin/sh -c \047/bin/echo XHC0 > /proc/acpi/wakeup\047'>> $(WAKEUP)"
 	sudo sh -c "echo '[Install]'>> $(WAKEUP)"
 	sudo sh -c "echo 'WantedBy=multi-user.target'>> $(WAKEUP)"
 	sudo systemctl enable wakeup.service
