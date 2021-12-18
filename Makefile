@@ -1,15 +1,27 @@
 all: update clock git chrome utils joplin_pc rawtherapee freecad scripts 
 
 
+arch-kde:
+	sudo pacman -S plasma kde-gtk-config kmix 
+
 arch-gnome:
-	sudo pacman -S gnome gnome-tweaks 
-	yay -S gnome-shell-extension-arc-menu nome-shell-extension-dash-to-panel-git
+
+	sudo pacman -S gnome gnome-tweaks gnome-shell-extension-appindicator base-devel
+	yay -S gnome-shell-extension-arc-menu nome-shell-extension-dash-to-panel-git gnome-shell-extension-custom-hot-corners-extended
+
+arch-bspwm:
+	yay -S bspwm sxhkd polybar compton rofi
+
+arch-vmware:
+	yay -S vmware
+	sudo systemctl start vmware-networks
+	sudo systemctl enable vmware-networks
 
 
 arch: scripts
 	sudo pacman -Syu
 	yay -S octopi ttf-envy-code-r google-chrome joplin-desktop dropbox teams zoom 
-	sudo pacman -S vim freecad kstars stellarium mc terminator geeqie flameshot emacs arduino code tilda rawtherapee syncthing
+	sudo pacman -S vim freecad kstars stellarium mc terminator geeqie flameshot emacs arduino code tilda rawtherapee syncthing ttf-inconsolata remmina
 
 
 powerlink:
