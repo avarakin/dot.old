@@ -20,7 +20,7 @@ arch-vmware:
 
 arch: scripts
 	sudo pacman -Syu
-	yay -S octopi ttf-envy-code-r google-chrome joplin-desktop dropbox teams zoom 
+	yay -S octopi ttf-envy-code-r google-chrome joplin-desktop dropbox teams zoom visual-studio-code-bin
 	sudo pacman -S vim freecad kstars stellarium mc terminator geeqie flameshot emacs arduino code tilda rawtherapee syncthing ttf-inconsolata remmina
 
 
