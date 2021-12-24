@@ -5,11 +5,19 @@
 
 --]]
 
+
 local gears = require("gears")
 local lain  = require("lain")
 local awful = require("awful")
 local wibox = require("wibox")
+local logout_menu_widget = require("awesome-wm-widgets.logout-menu-widget.logout-menu")
+local ram_widget = require("awesome-wm-widgets.ram-widget.ram-widget")
+local volume_widget = require("awesome-wm-widgets.volume-widget.volume")
+local cpu_widget = require("awesome-wm-widgets.cpu-widget.cpu-widget")
+local net_speed_widget = require("awesome-wm-widgets.net-speed-widget.net-speed")
 local dpi   = require("beautiful.xresources").apply_dpi
+
+
 
 local string, os = string, os
 local my_table = awful.util.table or gears.table -- 4.{0,1} compatibility
@@ -273,7 +281,11 @@ local cpu = lain.widget.cpu({
     end
 })
 local cpubg = wibox.container.background(cpu.widget, theme.bg_focus, gears.shape.rectangle)
-local cpuwidget = wibox.container.margin(cpubg, dpi(0), dpi(0), dpi(5), dpi(5))
+
+
+--local cpuwidget = wibox.container.margin(cpubg, dpi(0), dpi(0), dpi(5), dpi(5))
+--local cpuwidget = cpu_widget({ width = 70, step_width = 2, step_spacing = 0,color = '#434c5e'})
+
 
 -- Net
 local netdown_icon = wibox.widget.imagebox(theme.net_down)
@@ -413,14 +425,10 @@ function theme.at_screen_connect(s)
             layout = wibox.layout.fixed.horizontal,
             spr_bottom_right,
             volumewidget,
-            netdown_icon,
-            networkwidget,
-            netup_icon,
+            net_speed_widget({ width = 100}),
             bottom_bar,
-            mem_icon,
-            memory,
-            cpu_icon,
-            cpuwidget,
+            ram_widget(),
+            cpu_widget({ width = 70, step_width = 2, step_spacing = 0,color = '#434c5e'}),
             bottom_bar,
             calendar_icon,
             calendarwidget,
@@ -428,6 +436,7 @@ function theme.at_screen_connect(s)
             clock_icon,
             clockwidget,
             wibox.widget.systray(),
+            logout_menu_widget(),
         },
     }
 end
