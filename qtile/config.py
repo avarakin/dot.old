@@ -119,11 +119,11 @@ keys = [
 #groups = [Group(i) for i in "123456789"]
 
 groups = [
-        Group(name='1', matches=None, spawn='google-chrome-stable', layout="MonadTall", label='1:main'),
-        Group(name='2', matches=[Match(wm_class=["PixInsight"])], spawn='/opt/PixInsight/bin/PixInsight.sh -n=3', layout="max", label='2:PI1'),
+        Group(name='1', matches=None, spawn='google-chrome-stable', layout="MonadTall", label='1:main',position=1),
+        Group(name='2', matches=[Match(wm_class=["PixInsight"])], spawn='/opt/PixInsight/bin/PixInsight.sh -n=3', layout="max", label='2:PI1',position=2),
 #        Group(name='3', matches=None, spawn='/opt/PixInsight/bin/PixInsight.sh -n=4', layout="max", label='3:PI2'),
-        Group(name='3', matches=[Match(wm_class=["code-oss"])], spawn='code', layout="MonadTall", label='3:Dev'),
-        Group(name='4', matches=None, spawn='vncviewer', layout="MonadTall", label='4:Astro'),
+        Group(name='3', matches=[Match(wm_class=["code-oss"])], spawn='code', layout="MonadTall", label='3:Dev',position=3),
+        Group(name='4', matches=None, spawn='vncviewer', layout="MonadTall", label='4:Astro',position=4),
 
     ]
 

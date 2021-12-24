@@ -20,15 +20,16 @@ awful.rules.rules = {
       above = false,
       below = false,
       ontop = false,
-      sticky = false,
-      maximized_horizontal = false,
-      maximized_vertical = false
+      sticky = true,
+      maximized_horizontal = true,
+      maximized_vertical = false,
+      titlebars_enabled = true
     }
   },
-  {
-    rule_any = {name = {'QuakeTerminal'}},
-    properties = {skip_decoration = true}
-  },
+  { rule_any = {name = {'PixInsight'}}, properties = {tag = "2"}},
+  { rule_any = {name = {'Code'}}, properties = {tag = "4"} },
+  { rule_any = {name = {'VNC Viewer'}}, properties = {tag = "6"} },
+
   -- Titlebars
   {
     rule_any = {type = {'dialog'}, class = {'Wicd-client.py', 'calendar.google.com'}},

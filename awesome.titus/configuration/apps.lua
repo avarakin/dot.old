@@ -33,7 +33,12 @@ return {
     'flameshot',
     'terminator',
     'google-chrome-stable',
+    'code',
+    'vncviewer cge',
+    'vncviewer pier',
+    '/opt/PixInsight/bin/PixInsight.sh',
     'feh --randomize --bg-fill ~/.wallpapers/*',
+    'picom',
     -- Add applications that need to be killed between reloads
     -- to avoid multipled instances, inside the awspawn script
     '~/.config/awesome/configuration/awspawn' -- Spawn "dirty" apps that can linger between sessions
