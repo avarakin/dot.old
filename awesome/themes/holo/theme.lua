@@ -219,21 +219,50 @@ theme.fs = lain.widget.fs({
 })
 --]]
 
+
+-- MEM
+local memicon = wibox.widget.imagebox(theme.widget_mem)
+local memory = lain.widget.mem({
+    settings = function()
+        widget:set_markup(markup.fontfg(theme.font, "#e0da37", mem_now.used .. "M "))
+    end
+})
+
+
+
 -- ALSA volume bar
 theme.volume = lain.widget.alsabar({
-    notification_preset = { font = "Monospace 9"},
-    --togglechannel = "IEC958,3",
-    width = dpi(80), height = dpi(10), border_width = dpi(0),
-    colors = {
-        background = "#383838",
-        unmute     = "#80CCE6",
-        mute       = "#FF9F9F"
-    },
+    ticks = true, width = dpi(67),
+    notification_preset = { font = theme.font }
 })
-theme.volume.bar.paddings = dpi(0)
-theme.volume.bar.margins = dpi(5)
-local volumewidget = wibox.container.background(theme.volume.bar, theme.bg_focus, gears.shape.rectangle)
-volumewidget = wibox.container.margin(volumewidget, dpi(0), dpi(0), dpi(5), dpi(5))
+theme.volume.tooltip.wibox.fg = theme.fg_focus
+theme.volume.tooltip.wibox.font = theme.font
+theme.volume.bar:buttons(my_table.join (
+          awful.button({}, 1, function()
+            awful.spawn(string.format("%s -e alsamixer", terminal))
+          end),
+          awful.button({}, 2, function()
+            os.execute(string.format("%s set %s 100%%", theme.volume.cmd, theme.volume.channel))
+            theme.volume.update()
+          end),
+          awful.button({}, 3, function()
+            os.execute(string.format("%s set %s toggle", theme.volume.cmd, theme.volume.togglechannel or theme.volume.channel))
+            theme.volume.update()
+          end),
+          awful.button({}, 4, function()
+            os.execute(string.format("%s set %s 1%%+", theme.volume.cmd, theme.volume.channel))
+            theme.volume.update()
+          end),
+          awful.button({}, 5, function()
+            os.execute(string.format("%s set %s 1%%-", theme.volume.cmd, theme.volume.channel))
+            theme.volume.update()
+          end)
+))
+local volumebg = wibox.container.background(theme.volume.bar, "#585858", gears.shape.rectangle)
+local volumewidget = wibox.container.margin(volumebg, dpi(7), dpi(7), dpi(5), dpi(5))
+
+
+
 
 -- CPU
 local cpu_icon = wibox.widget.imagebox(theme.cpu)
@@ -250,6 +279,7 @@ local cpuwidget = wibox.container.margin(cpubg, dpi(0), dpi(0), dpi(5), dpi(5))
 local netdown_icon = wibox.widget.imagebox(theme.net_down)
 local netup_icon = wibox.widget.imagebox(theme.net_up)
 local net = lain.widget.net({
+    width = dpi(100),
     settings = function()
         widget:set_markup(markup.font("Roboto 1", " ") .. markup.font(theme.font, net_now.received .. " - "
                           .. net_now.sent) .. markup.font("Roboto 2", " "))
@@ -387,6 +417,8 @@ function theme.at_screen_connect(s)
             networkwidget,
             netup_icon,
             bottom_bar,
+            mem_icon,
+            memory,
             cpu_icon,
             cpuwidget,
             bottom_bar,
