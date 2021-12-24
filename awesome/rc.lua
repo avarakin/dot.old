@@ -68,7 +68,7 @@ local function run_once(cmd_arr)
     end
 end
 
-run_once({ "terminator", "picom" ,"unclutter -root" }) -- comma-separated entries
+run_once({ "google-chrome-stable", "terminator", "picom" , "vncviewer", "/opt/PixInsight/bin/PixInsight.sh" , "code" , "unclutter -root" }) -- comma-separated entries
 
 -- This function implements the XDG autostart specification
 --[[
@@ -107,7 +107,7 @@ local editor       = os.getenv("EDITOR") or "vim"
 local browser      = "google-chrome-stable"
 
 awful.util.terminal = terminal
-awful.util.tagnames = { "Main", "PI", "Dev", "Work"}
+awful.util.tagnames = { "Main", "PI", "Dev", "Work","Astro"}
 awful.layout.layouts = {
     --awful.layout.suit.floating,
     --awful.layout.suit.tile,
@@ -198,7 +198,7 @@ awful.util.mymainmenu = freedesktop.menu.build {
 }
 
 -- Hide the menu when the mouse leaves it
---[[
+
 awful.util.mymainmenu.wibox:connect_signal("mouse::leave", function()
     if not awful.util.mymainmenu.active_child or
        (awful.util.mymainmenu.wibox ~= mouse.current_wibox and
@@ -213,7 +213,6 @@ awful.util.mymainmenu.wibox:connect_signal("mouse::leave", function()
         end)
     end
 end)
---]]
 
 -- Set the Menubar terminal for applications that require it
 --menubar.utils.terminal = terminal
@@ -731,6 +730,12 @@ awful.rules.rules = {
     { rule_any = {type = { "normal", "dialog" }
       }, properties = { titlebars_enabled = true }
     },
+
+
+    { rule_any = {name = {'PixInsight'}}, properties = {tag = "PI"}},
+    { rule_any = {name = {'Code'}}, properties = {tag = "Dev"} },
+    { rule_any = {name = {'VNC Viewer'}}, properties = {tag = "Astro"} },
+  
 
     -- Set Firefox to always map on the tag named "2" on screen 1.
     -- { rule = { class = "Firefox" },
