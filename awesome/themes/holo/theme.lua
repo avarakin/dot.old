@@ -418,6 +418,7 @@ function theme.at_screen_connect(s)
             s.mylayoutbox,
             spr_small,
             s.mytag,
+            s.mypromptbox,
         
         },
         s.mytasklist, -- Middle widget
