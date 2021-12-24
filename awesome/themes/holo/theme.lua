@@ -18,8 +18,8 @@ local theme                                     = {}
 theme.default_dir                               = require("awful.util").get_themes_dir() .. "default"
 theme.icon_dir                                  = os.getenv("HOME") .. "/.config/awesome/themes/holo/icons"
 theme.wallpaper                                 = os.getenv("HOME") .. "/.config/awesome/themes/holo/wall.png"
-theme.font                                      = "Roboto Bold 14"
-theme.taglist_font                              = "Roboto Condensed Regular 14"
+theme.font                                      = "Roboto Condensed Regular 12"
+theme.taglist_font                              = "Roboto Condensed Regular 12"
 theme.fg_normal                                 = "#FFFFFF"
 theme.fg_focus                                  = "#0099CC"
 theme.bg_focus                                  = "#303030"
@@ -32,7 +32,7 @@ theme.border_focus                              = "#0099CC"
 theme.taglist_fg_focus                          = "#FFFFFF"
 theme.tasklist_bg_normal                        = "#222222"
 theme.tasklist_fg_focus                         = "#4CB7DB"
-theme.menu_height                               = dpi(20)
+theme.menu_height                               = dpi(30)
 theme.menu_width                                = dpi(160)
 theme.menu_icon_size                            = dpi(32)
 theme.awesome_icon                              = theme.icon_dir .. "/awesome_icon_white.png"
@@ -372,7 +372,9 @@ function theme.at_screen_connect(s)
         { -- Left widgets
             layout = wibox.layout.fixed.horizontal,
             mylauncher,
+            spr_small,
             s.mylayoutbox,
+            spr_small,
             s.mytag,
         
         },
@@ -380,6 +382,7 @@ function theme.at_screen_connect(s)
         { -- Right widgets
             layout = wibox.layout.fixed.horizontal,
             spr_bottom_right,
+            volumewidget,
             netdown_icon,
             networkwidget,
             netup_icon,
@@ -392,6 +395,7 @@ function theme.at_screen_connect(s)
             bottom_bar,
             clock_icon,
             clockwidget,
+            wibox.widget.systray(),
         },
     }
 end
