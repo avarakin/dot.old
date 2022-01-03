@@ -37,7 +37,7 @@ theme.bg_urgent                                 = "#006B8E"
 theme.border_width                              = dpi(3)
 theme.border_normal                             = "#252525"
 theme.border_focus                              = "#0099CC"
-theme.taglist_fg_focus                          = "#FFFFFF"
+theme.taglist_fg_focus                          = "#FF0000"
 theme.tasklist_bg_normal                        = "#222222"
 theme.tasklist_fg_focus                         = "#4CB7DB"
 theme.menu_height                               = dpi(30)
@@ -418,12 +418,17 @@ function theme.at_screen_connect(s)
             s.mylayoutbox,
             spr_small,
             s.mytag,
-            awful.widget.launcher({ image = os.getenv("HOME") .. "/.config/awesome/icons/google-chrome.png", command = "google-chrome-stable" }),
-            awful.widget.launcher({ image = os.getenv("HOME") .. "/.config/awesome/icons/octopi.png", command = "/usr/bin/octopi" }),
-            awful.widget.launcher({ image = os.getenv("HOME") .. "/.config/awesome/icons/terminator.png", command = "terminator" }),
-            awful.widget.launcher({ image = os.getenv("HOME") .. "/.config/awesome/icons/pixinsight.png", command = "/opt/PixInsight/bin/PixInsight.sh" }),
-            awful.widget.launcher({ image = os.getenv("HOME") .. "/.config/awesome/icons/joplin.png", command = "joplin-desktop" }),
-           
+            awful.widget.launcher({ image = os.getenv("HOME") .. "/.config/awesome/icons/google-chrome.png", command = "jumpapp -R google-chrome-stable" }),
+            awful.widget.launcher({ image = os.getenv("HOME") .. "/.config/awesome/icons/octopi.png", command = "jumpapp -R /usr/bin/octopi" }),
+            awful.widget.launcher({ image = os.getenv("HOME") .. "/.config/awesome/icons/terminator.png", command = "jumpapp -R terminator" }),
+            awful.widget.launcher({ image = os.getenv("HOME") .. "/.config/awesome/icons/pixinsight.png", command = "jumpapp /opt/PixInsight/bin/PixInsight.sh" }),
+            awful.widget.launcher({ image = os.getenv("HOME") .. "/.config/awesome/icons/joplin.png", command = "jumpapp -R joplin-desktop" }),
+            awful.widget.launcher({ image = os.getenv("HOME") .. "/.config/awesome/icons/freecad.png", command = "jumpapp /opt/Apps/FreeCAD_0.19.3-Linux-Conda_glibc2.12-x86_64.AppImage" }),
+            awful.widget.launcher({ image = os.getenv("HOME") .. "/.config/awesome/icons/nemo.png", command = "jumpapp -R nemo" }),
+            awful.widget.launcher({ image = os.getenv("HOME") .. "/.config/awesome/icons/code.png", command = "jumpapp code" }),
+
+            
+
             s.mypromptbox,
         },
         s.mytasklist, -- Middle widget

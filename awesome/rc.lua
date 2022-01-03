@@ -256,11 +256,27 @@ awful.screen.connect_for_each_screen(function(s) beautiful.at_screen_connect(s) 
 
 -- {{{ Mouse bindings
 
-clientbuttons = awful.util.table.join(
-    awful.button({ }, 1, function (c) client.focus = c; c:raise() end),
-    awful.button({ modkey }, 1, awful.mouse.client.move),
-    awful.button({ }, 3, awful.mouse.client.resize)
-)
+--clientbuttons = awful.util.table.join(
+--    awful.button({ }, 1, function (c) client.focus = c; c:raise() end),
+--    awful.button({ modkey }, 1, awful.mouse.client.move),
+--    awful.button({ }, 3, awful.mouse.resize)
+--)
+
+
+-- @DOC_CLIENT_BUTTONS@
+client.connect_signal("request::default_mousebindings", function()
+    awful.mouse.append_client_mousebindings({
+        awful.button({ }, 1, function (c)
+            c:activate { context = "mouse_click" }
+        end),
+        awful.button({ modkey }, 1, function (c)
+            c:activate { context = "mouse_click", action = "mouse_move"  }
+        end),
+        awful.button({ }, 3, function (c)
+            c:activate { context = "mouse_click", action = "mouse_resize"}
+        end),
+    })
+end)
 
 
 root.buttons(mytable.join(
@@ -455,11 +471,12 @@ globalkeys = mytable.join(
               {description = "copy gtk to terminal", group = "hotkeys"}),
 
     -- User programs
-    awful.key({ modkey }, "b",      function () awful.spawn(browser)  end, {description = "run browser", group = "launcher"}),
-    awful.key({ modkey }, "Return", function () awful.spawn(terminal) end, {description = "open a terminal", group = "launcher"}),
-    awful.key({ modkey }, "c",      function () awful.spawn("code")  end,  {description = "run code", group = "launcher"}),
-    --awful.key({ modkey }, "t",      function () awful.spawn("code")  end,  {description = "run teams", group = "launcher"}),
-    awful.key({ modkey }, "p",      function () awful.spawn("/opt/PixInsight/bin/PixInsight.sh -n") end, {description = "open PI", group = "launcher"}),
+    awful.key({ modkey }, "b",      function () awful.spawn("jumpapp -R google-chrome-stable")  end, {description = "run browser", group = "launcher"}),
+    awful.key({ modkey }, "t", function () awful.spawn("jumpapp -R terminator") end, {description = "open a terminal", group = "launcher"}),
+    awful.key({ modkey }, "c",      function () awful.spawn("jumpapp code")  end,  {description = "run code", group = "launcher"}),
+    awful.key({ modkey }, "f",      function () awful.spawn("jumpapp freecad")  end,  {description = "run teams", group = "launcher"}),
+    awful.key({ modkey }, "p",      function () awful.spawn("jumpapp /opt/PixInsight/bin/PixInsight.sh") end, {description = "open PI", group = "launcher"}),
+    awful.key({ modkey }, "n",      function () awful.spawn("jumpapp -R nemo")  end,  {description = "run teams", group = "launcher"}),
 
 
     -- Default
