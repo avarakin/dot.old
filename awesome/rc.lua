@@ -471,13 +471,15 @@ globalkeys = mytable.join(
               {description = "copy gtk to terminal", group = "hotkeys"}),
 
     -- User programs
-    awful.key({ modkey }, "b",      function () awful.spawn("jumpapp -R google-chrome-stable")  end, {description = "run browser", group = "launcher"}),
+    awful.key({ modkey }, "b",      function () awful.spawn("jumpapp -R /opt/google/chrome/chrome")  end, {description = "run browser", group = "launcher"}),
     awful.key({ modkey }, "t", function () awful.spawn("jumpapp -R terminator") end, {description = "open a terminal", group = "launcher"}),
     awful.key({ modkey }, "c",      function () awful.spawn("jumpapp code")  end,  {description = "run code", group = "launcher"}),
     awful.key({ modkey }, "f",      function () awful.spawn("jumpapp freecad")  end,  {description = "run teams", group = "launcher"}),
     awful.key({ modkey }, "p",      function () awful.spawn("jumpapp /opt/PixInsight/bin/PixInsight.sh") end, {description = "open PI", group = "launcher"}),
-    awful.key({ modkey }, "n",      function () awful.spawn("jumpapp -R nemo")  end,  {description = "run teams", group = "launcher"}),
-
+    awful.key({ modkey }, "n",      function () awful.spawn("jumpapp -R nemo")  end,  {description = "run nemo", group = "launcher"}),
+    awful.key({ modkey }, "d",      function () awful.spawn("jumpapp -R dolphin")  end,  {description = "run dolphin", group = "launcher"}),
+    awful.key({ modkey }, "k",      function () awful.spawn("jumpapp -R kstars")  end,  {description = "run kstars", group = "launcher"}),
+    awful.key({ modkey }, "v",      function () awful.spawn("jumpapp -R vncviewer")  end,  {description = "run kstars", group = "launcher"}),
 
     -- Default
     --[[ Menubar

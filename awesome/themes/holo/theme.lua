@@ -418,7 +418,7 @@ function theme.at_screen_connect(s)
             s.mylayoutbox,
             spr_small,
             s.mytag,
-            awful.widget.launcher({ image = os.getenv("HOME") .. "/.config/awesome/icons/google-chrome.png", command = "jumpapp -R google-chrome-stable" }),
+            awful.widget.launcher({ image = os.getenv("HOME") .. "/.config/awesome/icons/google-chrome.png", command = "jumpapp -R /opt/google/chrome/chrome" }),
             awful.widget.launcher({ image = os.getenv("HOME") .. "/.config/awesome/icons/octopi.png", command = "jumpapp -R /usr/bin/octopi" }),
             awful.widget.launcher({ image = os.getenv("HOME") .. "/.config/awesome/icons/terminator.png", command = "jumpapp -R terminator" }),
             awful.widget.launcher({ image = os.getenv("HOME") .. "/.config/awesome/icons/pixinsight.png", command = "jumpapp /opt/PixInsight/bin/PixInsight.sh" }),
@@ -426,6 +426,8 @@ function theme.at_screen_connect(s)
             awful.widget.launcher({ image = os.getenv("HOME") .. "/.config/awesome/icons/freecad.png", command = "jumpapp /opt/Apps/FreeCAD_0.19.3-Linux-Conda_glibc2.12-x86_64.AppImage" }),
             awful.widget.launcher({ image = os.getenv("HOME") .. "/.config/awesome/icons/nemo.png", command = "jumpapp -R nemo" }),
             awful.widget.launcher({ image = os.getenv("HOME") .. "/.config/awesome/icons/code.png", command = "jumpapp code" }),
+            awful.widget.launcher({ image = os.getenv("HOME") .. "/.config/awesome/icons/vncviewer.png", command = "jumpapp vncviewer" }),
+            awful.widget.launcher({ image = os.getenv("HOME") .. "/.config/awesome/icons/kstars.png", command = "jumpapp kstars" }),
 
             
 
