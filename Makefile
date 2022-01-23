@@ -22,11 +22,18 @@ desktop:
 
 astro:
 	sudo pacman -S --noconfirm --needed kstars breeze-icons binutils patch  libraw libindi gpsd gcc
-	yay -S --nobatchinstall --noconfirm --needed libindi_3rdparty sextractor-bin astrometry.net phd2 ccdciel
+	-yay -S --nobatchinstall --noconfirm --needed libindi_3rdparty 
+	-yay -S --nobatchinstall --noconfirm --needed sextractor-bin 
+	-yay -S --nobatchinstall --noconfirm --needed astrometry.net 
+	-yay -S --nobatchinstall --noconfirm --needed phd2 
+	-yay -S --nobatchinstall --noconfirm --needed ccdciel
 	wget broiler.astrometry.net/~dstn/4100/index-4107.fits
 	wget broiler.astrometry.net/~dstn/4100/index-4108.fits
 	wget broiler.astrometry.net/~dstn/4100/index-4109.fits
 	sudo mv index-410[789].fits /usr/share/astrometry/data
+
+_ccdciel:
+	cd ccdciel && makepkg && sudo pacman -U --noconfirm  ccdciel-0.9.76-1-x86_64.pkg.tar.zst
 
 x:
 	sudo pacman -S --noconfirm --needed mesa xorg xorg-server xorg-apps xorg-drivers xorg-xkill xorg-xinit sddm
