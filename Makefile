@@ -1,52 +1,53 @@
 all: base astro
 
 nox:  git
-	sudo pacman -S vim mc emacs htop linux linux-firmware linux-headers neofetch networkmanager ntp p7zip pulseaudio \
-	rsync snapper sudo unrar unzip usbutils wget zsh zsh-syntax-highlighting zsh-autosuggestions alsa-plugins alsa-utils
+	sudo pacman -S --noconfirm --needed vim mc htop neofetch networkmanager ntp p7zip \
+	rsync snapper sudo unrar unzip usbutils wget zsh zsh-syntax-highlighting zsh-autosuggestions 
 	sudo systemctl enable ntpd.service
-	sudo systemctl disable dhcpcd.service
-	sudo systemctl stop dhcpcd.service
-	sudo systemctl enable NetworkManager.service
+	sudo systemctl enable --now sshd
+	#sudo systemctl disable dhcpcd.service
+	#sudo systemctl stop dhcpcd.service
+	#sudo systemctl enable NetworkManager.service
 
 base: nox scripts mate
-	yay -S octopi ttf-envy-code-r google-chrome joplin-desktop visual-studio-code-bin snapper-gui-git 
-	sudo pacman -S terminator geeqie flameshot arduino tilda syncthing ttf-inconsolata remmina gparted  \
+	yay -S --noconfirm --needed octopi ttf-envy-code-r google-chrome joplin-desktop visual-studio-code-bin snapper-gui-git 
+	sudo pacman -S --noconfirm --needed terminator geeqie flameshot arduino tilda syncthing ttf-inconsolata remmina gparted emacs pulseaudio \
 	terminus-font ttf-droid ttf-hack ttf-roboto 
 
 
 desktop: 
-	yay -S dropbox teams zoom vmware 
-	sudo pacman -S rawtherapee cura system-config-printer gimp 
+	yay -S --noconfirm --needed  dropbox teams zoom vmware 
+	sudo pacman -S --noconfirm --needed rawtherapee cura system-config-printer gimp 
 	systemctl enable cups.service
 
 astro:
-	sudo pacman -S --needed kstars breeze-icons yaourt binutils patch  libraw libindi gpsd gcc
-	yay -S libindi_3rdparty sextractor-bin astrometry.net phd2 ccdciel
+	sudo pacman -S --noconfirm --needed kstars breeze-icons binutils patch  libraw libindi gpsd gcc
+	yay -S --nobatchinstall --noconfirm --needed libindi_3rdparty sextractor-bin astrometry.net phd2 ccdciel
 	wget broiler.astrometry.net/~dstn/4100/index-4107.fits
 	wget broiler.astrometry.net/~dstn/4100/index-4108.fits
 	wget broiler.astrometry.net/~dstn/4100/index-4109.fits
 	sudo mv index-410[789].fits /usr/share/astrometry/data
 
 x:
-	sudo pacman -S mesa xorg xorg-server xorg-apps xorg-drivers xorg-xkill xorg-xinit sddm
+	sudo pacman -S --noconfirm --needed mesa xorg xorg-server xorg-apps xorg-drivers xorg-xkill xorg-xinit sddm
 	sudo systemctl enable sddm.service
 
 mate: x
-	sudo pacman -S mate mate-extras
+	sudo pacman -S --noconfirm --needed mate mate-extra
 
 kde: x
-	sudo pacman -S plasma kde-gtk-config kmix 
+	sudo pacman -S --noconfirm --needed plasma kde-gtk-config kmix 
 
 gnome: x
 
-	sudo pacman -S gnome gnome-tweaks gnome-shell-extension-appindicator base-devel
-	yay -S gnome-shell-extension-arc-menu nome-shell-extension-dash-to-panel-git gnome-shell-extension-custom-hot-corners-extended
+	sudo pacman -S --noconfirm --needed gnome gnome-tweaks gnome-shell-extension-appindicator base-devel
+	yay -S --noconfirm --needed gnome-shell-extension-arc-menu nome-shell-extension-dash-to-panel-git gnome-shell-extension-custom-hot-corners-extended
 
 bspwm: x
-	yay -S bspwm sxhkd polybar compton rofi
+	yay -S --noconfirm --needed bspwm sxhkd polybar compton rofi
 
 vmware:
-	yay -S vmware
+	yay -S --noconfirm --needed vmware
 	sudo systemctl start vmware-networks
 	sudo systemctl enable vmware-networks
 
@@ -56,6 +57,7 @@ powerlink:
 	echo 'source ~/powerlevel10k/powerlevel10k.zsh-theme' >> ~/.zshrc
 
 scripts:
+	mkdir -p ~/.local/share/nemo/scripts
 	cp resize_for_CN ~/.local/share/nemo/scripts
 
 git:
