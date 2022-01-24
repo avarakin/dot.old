@@ -10,7 +10,13 @@ nox:  git
 	#sudo systemctl enable NetworkManager.service
 
 base: nox scripts mate
-	yay -S --noconfirm --needed octopi ttf-envy-code-r google-chrome joplin-desktop visual-studio-code-bin snapper-gui-git 
+	yay -S --noconfirm --needed nomachine
+	yay -S --noconfirm --needed octopi 
+	yay -S --noconfirm --needed ttf-envy-code-r 
+	yay -S --noconfirm --needed gooogle-chrome 
+	yay -S --noconfirm --needed joplin-desktop 
+	yay -S --noconfirm --needed visual-studio-code-bin 
+	yay -S --noconfirm --needed snapper-gui-git 
 	sudo pacman -S --noconfirm --needed terminator geeqie flameshot arduino tilda syncthing ttf-inconsolata remmina gparted emacs pulseaudio \
 	terminus-font ttf-droid ttf-hack ttf-roboto 
 
@@ -26,18 +32,17 @@ astro:
 	-yay -S --nobatchinstall --noconfirm --needed sextractor-bin 
 	-yay -S --nobatchinstall --noconfirm --needed astrometry.net 
 	-yay -S --nobatchinstall --noconfirm --needed phd2 
-	-yay -S --nobatchinstall --noconfirm --needed ccdciel
+	#-yay -S --nobatchinstall --noconfirm --needed ccdciel
 	wget broiler.astrometry.net/~dstn/4100/index-4107.fits
 	wget broiler.astrometry.net/~dstn/4100/index-4108.fits
 	wget broiler.astrometry.net/~dstn/4100/index-4109.fits
 	sudo mv index-410[789].fits /usr/share/astrometry/data
-
-_ccdciel:
 	cd ccdciel && makepkg && sudo pacman -U --noconfirm  ccdciel-0.9.76-1-x86_64.pkg.tar.zst
 
 x:
-	sudo pacman -S --noconfirm --needed mesa xorg xorg-server xorg-apps xorg-drivers xorg-xkill xorg-xinit sddm
-	sudo systemctl enable sddm.service
+	sudo pacman -S --noconfirm --needed mesa xorg xorg-server xorg-apps xorg-drivers xorg-xkill xorg-xinit
+	sudo pacman -S lightdm-gtk-greeter  lightdm 
+	sudo systemctl enable lightdm.service
 
 mate: x
 	sudo pacman -S --noconfirm --needed mate mate-extra
@@ -89,3 +94,12 @@ wakeup:
 	sudo systemctl start wakeup.service
 
 
+
+#configure tigervnc 
+vnc :
+	sudo pacman -S --noconfirm --needed tigervnc
+	echo geometry=1920x1080 > ~/.vnc/config
+	echo alwaysshared >> ~/.vnc/config
+	sudo sh -c "echo :1=$$USER >>  /etc/tigervnc/vncserver.users"
+	sudo systemctl enable vncserver@:1.service
+	sudo systemctl start vncserver@:1.service

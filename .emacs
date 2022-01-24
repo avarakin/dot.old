@@ -1,9 +1,23 @@
 (xterm-mouse-mode 1)
 
 
-(setq save-place-file "~/.emacs.d/saveplace")
-(setq-default save-place t)
-(require 'saveplace)
+;(setq save-place-file "~/.emacs.d/saveplace")
+;(setq-default save-place t)
+;(require 'saveplace)
+
+
+(cua-mode t)
+(setq cua-auto-tabify-rectangles nil) ;; Don't tabify after rectangle commands
+(transient-mark-mode 1) ;; No region when it is not highlighted
+(setq cua-keep-region-after-copy t) ;; Standard Windows behaviour
+
+
+
+(global-set-key '[(control insert)]                        'kill-ring-save)
+(global-set-key '[(shift insert)]                          'yank)
+;(global-set-key '[(shift delete)]                          ')
+
+
 
 
 (global-set-key '[(control tab)]                          'cycle-buffers)
