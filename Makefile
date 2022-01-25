@@ -1,8 +1,8 @@
-all: base astro
+all: base astro vnc wap
 
 nox:  git
 	sudo pacman -S --noconfirm --needed vim mc htop neofetch networkmanager ntp p7zip \
-	rsync snapper sudo unrar unzip usbutils wget zsh zsh-syntax-highlighting zsh-autosuggestions 
+	rsync snapper sudo unrar unzip usbutils wget zsh zsh-syntax-highlighting zsh-autosuggestions net-tools inetutils
 	sudo systemctl enable ntpd.service
 	sudo systemctl enable --now sshd
 	#sudo systemctl disable dhcpcd.service
@@ -10,13 +10,13 @@ nox:  git
 	#sudo systemctl enable NetworkManager.service
 
 base: nox scripts mate
-	yay -S --noconfirm --needed nomachine
-	yay -S --noconfirm --needed octopi 
-	yay -S --noconfirm --needed ttf-envy-code-r 
-	yay -S --noconfirm --needed gooogle-chrome 
-	yay -S --noconfirm --needed joplin-desktop 
-	yay -S --noconfirm --needed visual-studio-code-bin 
-	yay -S --noconfirm --needed snapper-gui-git 
+	#yay -S --noconfirm --needed nomachine
+	-yay -S --noconfirm --needed octopi 
+	-yay -S --noconfirm --needed ttf-envy-code-r 
+	-yay -S --noconfirm --needed gooogle-chrome 
+	-yay -S --noconfirm --needed joplin-appimage 
+	-yay -S --noconfirm --needed visual-studio-code-bin 
+	-yay -S --noconfirm --needed snapper-gui-git 
 	sudo pacman -S --noconfirm --needed terminator geeqie flameshot arduino tilda syncthing ttf-inconsolata remmina gparted emacs pulseaudio \
 	terminus-font ttf-droid ttf-hack ttf-roboto 
 
@@ -41,7 +41,7 @@ astro:
 
 x:
 	sudo pacman -S --noconfirm --needed mesa xorg xorg-server xorg-apps xorg-drivers xorg-xkill xorg-xinit
-	sudo pacman -S lightdm-gtk-greeter  lightdm 
+	sudo pacman -S --noconfirm --needed lightdm-gtk-greeter  lightdm 
 	sudo systemctl enable lightdm.service
 
 mate: x
@@ -78,23 +78,6 @@ git:
 	git config credential.helper 'cache --timeout=30000'
 
 
-WAKEUP=/lib/systemd/system/wakeup.service
-wakeup:
-	sudo sh -c "echo '[Unit]' > $(WAKEUP)"
-	sudo sh -c "echo 'Description=Disable wakeup on USB' >> $(WAKEUP)"
-	sudo sh -c "echo 'After=multi-user.target' >> $(WAKEUP)"
-	sudo sh -c "echo '[Service]'>> $(WAKEUP)"
-	sudo sh -c "echo 'Type=oneshot'>> $(WAKEUP)"
-	sudo sh -c "echo 'RemainAfterExit=yes'>> $(WAKEUP)"
-#	sudo sh -c "echo 'ExecStart=/bin/echo PTXH > /proc/acpi/wakeup'>> $(WAKEUP)"
-	sudo sh -c "echo 'ExecStart=/bin/sh -c \047/bin/echo XHC0 > /proc/acpi/wakeup\047'>> $(WAKEUP)"
-	sudo sh -c "echo '[Install]'>> $(WAKEUP)"
-	sudo sh -c "echo 'WantedBy=multi-user.target'>> $(WAKEUP)"
-	sudo systemctl enable wakeup.service
-	sudo systemctl start wakeup.service
-
-
-
 #configure tigervnc 
 vnc :
 	sudo pacman -S --noconfirm --needed tigervnc
@@ -103,3 +86,16 @@ vnc :
 	sudo sh -c "echo :1=$$USER >>  /etc/tigervnc/vncserver.users"
 	sudo systemctl enable vncserver@:1.service
 	sudo systemctl start vncserver@:1.service
+
+
+wap :
+	yay -S --noconfirm --needed create_ap-git
+	sudo sed -i.bak 's/SSID=MyAccessPoint/SSID=zbox/'  /etc/create_ap.conf
+	sudo sed -i.bak 's/PASSPHRASE=12345678/PASSPHRASE=password/'  /etc/create_ap.conf
+	sudo sed -i.bak 's/SSID=INTERNET_IFACE=eth0/INTERNET_IFACE=enp2s0/'  /etc/create_ap.conf
+	sudo sed -i.bak 's/NO_VIRT=0/NO_VIRT=1/'  /etc/create_ap.conf
+	sudo sed -i.bak 's/WIFI_IFACE=wlan0/WIFI_IFACE=wlp3s0/'  /etc/create_ap.conf
+	sudo systemctl enable create_ap
+	sudo systemctl start create_ap
+	sleep 5
+	sudo systemctl status create_ap
