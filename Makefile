@@ -22,7 +22,10 @@ base: nox scripts mate
 
 
 desktop: 
-	yay -S --noconfirm --needed  dropbox teams zoom vmware 
+	-yay -S --noconfirm --needed  dropbox 
+	-yay -S --noconfirm --needed  teams 
+	-yay -S --noconfirm --needed  zoom 
+	-yay -S --noconfirm --needed  vmware 
 	sudo pacman -S --noconfirm --needed rawtherapee cura system-config-printer gimp 
 	systemctl enable cups.service
 
