@@ -1,15 +1,110 @@
 all: base astro vnc wap
 
+DISK=/dev/nvme0n1
+EFI=/dev/nvme0n1p1
+ROOT=/dev/nvme0n1p5
+USER=alex
+NAME=PC
+TIMEZONE=America/New_York
+KEYMAP=-us
+
+speedup:
+	sed -i 's/^#ParallelDownloads/ParallelDownloads/' /etc/pacman.conf
+	pacman -S --noconfirm reflector rsync grub
+	cp /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.backup
+	reflector -a 48 -c `curl -4 ifconfig.co/country-iso` -f 5 -l 20 --sort rate --save /etc/pacman.d/mirrorlist
+
+
+#This will wipe out the whole disk!
+prepare_disk:
+#intentionally, sudo is missing	
+	pacman -S --noconfirm gptfdisk btrfs-progs
+	sgdisk -Z $$DISK # zap all on disk
+	sgdisk -a 2048 -o $$DISK # new gpt disk 2048 alignment
+
+# 	create partitions
+#	sgdisk -n 1::+1M --typecode=1:ef02 --change-name=1:'BIOSBOOT' ${DISK} # partition 1 (BIOS Boot Partition)
+	sgdisk -n 1::+300M --typecode=2:ef00 --change-name=2:'EFIBOOT' $$DISK # partition 2 (UEFI Boot Partition)
+	sgdisk -n 2::-0 --typecode=3:8300 --change-name=2:'ROOT' $$DISK # partition  (Root), default start, remaining
+
+
+format:
+#intentionally, sudo is missing	
+    mkfs.vfat -F32 -n "EFIBOOT" $$EFI
+    mkfs.btrfs -L ROOT $$ROOT -f
+    mount -t btrfs $$ROOT /mnt
+	ls /mnt | xargs btrfs subvolume delete
+	btrfs subvolume create /mnt/@
+	umount /mnt
+	mount -t btrfs -o noatime,compress=zstd,ssd,subvol=@ -L ROOT /mnt
+
+pacstrap:
+	pacstrap /mnt base base-devel linux linux-firmware vim make nano sudo archlinux-keyring wget libnewt --noconfirm --needed
+	echo "keyserver hkp://keyserver.ubuntu.com" >> /mnt/etc/pacman.d/gnupg/gpg.conf
+	cp -R Makefile /mnt/root
+	cp /etc/pacman.d/mirrorlist /mnt/etc/pacman.d/mirrorlist
+
+mount:
+	mount $$ROOT /mnt -o subvol=@
+
+#now you need to do 
+#	arch-chroot /mnt 
+#	cd /root
+#and continue with rest of the steps
+
+isnstall:
+	sed -i 's/^#en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen
+	locale-gen
+	timedatectl --no-ask-password set-timezone $$TIMEZONE
+	timedatectl --no-ask-password set-ntp 1
+	localectl --no-ask-password set-locale LANG="en_US.UTF-8" LC_TIME="en_US.UTF-8"
+	localectl --no-ask-password set-keymap $$KEYMAP
+	sed -i 's/^# %wheel ALL=(ALL) NOPASSWD: ALL/%wheel ALL=(ALL) NOPASSWD: ALL/' /etc/sudoers
+#Add parallel downloading
+	sed -i 's/^#ParallelDownloads/ParallelDownloads/' /etc/pacman.conf
+#Enable multilib
+	sed -i "/\[multilib\]/,/Include/"'s/^#//' /etc/pacman.conf
+	pacman -Sy --noconfirm
+    groupadd libvirt
+    useradd -m -G wheel,libvirt -s /bin/bash $$USER 
+	cp -R /root/Makefile /home/$$USER/
+    chown -R $$USER: /home/$$USER
+	echo $$NAME > /etc/hostname
+
+
+hardware:
+#Uncomment per your hardware:
+#	pacman -S --noconfirm intel-ucode
+	pacman -S --noconfirm amd-ucode
+#   pacman -S nvidia --noconfirm --needed && nvidia-xconfig
+    pacman -S xf86-video-amdgpu --noconfirm --needed
+#    pacman -S libva-intel-driver libvdpau-va-gl lib32-vulkan-intel vulkan-intel libva-intel-driver libva-utils lib32-mesa --needed --noconfirm
+
+yay:
+	git clone "https://aur.archlinux.org/yay.git" && cd ~/yay && makepkg -si --noconfirm
+
+grub:
+	yay -S --noconfirm --needed update-grub
+	grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=GRUB
+	sudo update-grub
+	genfstab -U / >> /etc/fstab
+
+
+##########################
+# Rest of the install
+##########################
+
 nox:  git
 	sudo pacman -S --noconfirm --needed vim mc htop neofetch networkmanager ntp p7zip \
-	rsync snapper sudo unrar unzip usbutils wget zsh zsh-syntax-highlighting zsh-autosuggestions net-tools inetutils
-	sudo systemctl enable ntpd.service
+	rsync snapper sudo unrar openssh unzip usbutils wget zsh zsh-syntax-highlighting zsh-autosuggestions \
+	net-tools inetutils
+	sudo systemctl enable --now ntpd.service
 	sudo systemctl enable --now sshd
-	#sudo systemctl disable dhcpcd.service
-	#sudo systemctl stop dhcpcd.service
-	#sudo systemctl enable NetworkManager.service
+	sudo systemctl enable --now NetworkManager.service
 
 base: nox scripts mate
+	sudo pacman -S --noconfirm --needed terminator geeqie flameshot arduino tilda syncthing ttf-inconsolata remmina gparted emacs pulseaudio \
+	terminus-font ttf-droid ttf-hack ttf-roboto 
 	#yay -S --noconfirm --needed nomachine
 	-yay -S --noconfirm --needed octopi 
 	-yay -S --noconfirm --needed ttf-envy-code-r 
@@ -17,8 +112,6 @@ base: nox scripts mate
 	-yay -S --noconfirm --needed joplin-appimage 
 	-yay -S --noconfirm --needed visual-studio-code-bin 
 	-yay -S --noconfirm --needed snapper-gui-git 
-	sudo pacman -S --noconfirm --needed terminator geeqie flameshot arduino tilda syncthing ttf-inconsolata remmina gparted emacs pulseaudio \
-	terminus-font ttf-droid ttf-hack ttf-roboto 
 
 
 desktop: 
@@ -56,7 +149,7 @@ kde: x
 gnome: x
 
 	sudo pacman -S --noconfirm --needed gnome gnome-tweaks gnome-shell-extension-appindicator base-devel
-	yay -S --noconfirm --needed gnome-shell-extension-arc-menu nome-shell-extension-dash-to-panel-git gnome-shell-extension-custom-hot-corners-extended
+	yay -S --noconfirm --needed gnome-shell-extension-arc-menu gnome-shell-extension-dash-to-panel-git gnome-shell-extension-custom-hot-corners-extended
 
 bspwm: x
 	yay -S --noconfirm --needed bspwm sxhkd polybar compton rofi
@@ -67,7 +160,7 @@ vmware:
 	sudo systemctl enable vmware-networks
 
 powerlink:
-	touch "$HOME/.cache/zshhistory"
+	touch "$$HOME/.cache/zshhistory"
 	git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ~/powerlevel10k
 	echo 'source ~/powerlevel10k/powerlevel10k.zsh-theme' >> ~/.zshrc
 
