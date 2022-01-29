@@ -33,26 +33,26 @@ prepare_disk:
 file_systems:
 	mkfs.vfat -F32 -n "EFIBOOT" $(EFI)
 	mkfs.btrfs $(ROOT) -f
-	mount -t btrfs $(ROOT) /mnt
+	mount -t btrfs $(ROOT) /mnt/
 	btrfs subvolume create /mnt/@
-	btrfs subvolume create /mnt/home
+	btrfs subvolume create /mnt/@home
 	btrfs subvolume create /mnt/@var_log
 	btrfs subvolume create /mnt/@var_cache
 	btrfs subvolume create /mnt/@var_tmp
 	btrfs subvolume create /mnt/@snapshots
 	umount /mnt
-	mkdir /mnt/home 
-	mkdir /mnt/var
-	mkdir /mnt/var/log 
-	mkdir /mnt/var/cache 
-	mkdir /mnt/var/tmp
-	mkdir /mnt/.snapshots
-	mount -t btrfs -o $(BTRFS_OPTS),subvol=@  /mnt
-	mount -t btrfs -o $(BTRFS_OPTS),subvol=@home  /mnt/home
-	mount -t btrfs -o $(BTRFS_OPTS),subvol=@var_log  /mnt/var/log
-	mount -t btrfs -o $(BTRFS_OPTS),subvol=@var_cache  /mnt/var/cache
-	mount -t btrfs -o $(BTRFS_OPTS),subvol=@var_tmp  /mnt/var/tmp
-	mount -t btrfs -o $(BTRFS_OPTS),subvol=@snapshots  /mnt/.snapshots
+	mount $(ROOT) -t btrfs -o $(BTRFS_OPTS),subvol=@  /mnt
+	mkdir -p /mnt/home
+	mkdir -p /mnt/var
+	mkdir -p /mnt/var/log
+	mkdir -p /mnt/var/cache
+	mkdir -p /mnt/var/tmp
+	mkdir -p /mnt/.snapshots
+	mount $(ROOT) -t btrfs -o $(BTRFS_OPTS),subvol=@home  /mnt/home
+	mount $(ROOT) -t btrfs -o $(BTRFS_OPTS),subvol=@var_log  /mnt/var/log
+	mount $(ROOT) -t btrfs -o $(BTRFS_OPTS),subvol=@var_cache  /mnt/var/cache
+	mount $(ROOT) -t btrfs -o $(BTRFS_OPTS),subvol=@var_tmp  /mnt/var/tmp
+	mount $(ROOT) -t btrfs -o $(BTRFS_OPTS),subvol=@snapshots  /mnt/.snapshots
 
 
 pacstrap:
@@ -60,9 +60,6 @@ pacstrap:
 	echo "keyserver hkp://keyserver.ubuntu.com" >> /mnt/etc/pacman.d/gnupg/gpg.conf
 	cp -R Makefile /mnt/root
 	cp /etc/pacman.d/mirrorlist /mnt/etc/pacman.d/mirrorlist
-
-mount:
-	mount $(ROOT) /mnt -o subvol=@
 
 #now you need to do 
 #	arch-chroot /mnt 
