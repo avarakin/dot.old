@@ -1,10 +1,10 @@
 all: base astro vnc wap
 
-DISK=/dev/nvme0n1
-EFI=/dev/nvme0n1p1
-ROOT=/dev/nvme0n1p5
+DISK=/dev/sda
+EFI=/dev/sda1
+ROOT=/dev/sda2
 USER=alex
-NAME=PC
+NAME=zbox
 TIMEZONE=America/New_York
 KEYMAP=-us
 BTRFS_OPTS=defaults,noatime,compress=zstd,ssd,autodefrag
@@ -18,24 +18,22 @@ speedup:
 
 #This will wipe out the whole disk!
 prepare_disk:
-#intentionally, sudo is missing	
+	pacman -Sy --noconfirm
 	pacman -S --noconfirm gptfdisk btrfs-progs
-	sgdisk -Z $$DISK # zap all on disk
-	sgdisk -a 2048 -o $$DISK # new gpt disk 2048 alignment
-
+	sgdisk -Z $(DISK)
+	sgdisk -a 2048 -o $(DISK)
 # 	create partitions
-#	sgdisk -n 1::+1M --typecode=1:ef02 --change-name=1:'BIOSBOOT' ${DISK} # partition 1 (BIOS Boot Partition)
-	sgdisk -n 1::+300M --typecode=2:ef00 --change-name=2:'EFIBOOT' $$DISK # partition 2 (UEFI Boot Partition)
-	sgdisk -n 2::-0 --typecode=3:8300 --change-name=2:'ROOT' $$DISK # partition  (Root), default start, remaining
+#	sgdisk -n 1::+1M --typecode=1:ef02 --change-name=1:'BIOSBOOT' $(DISK)
+	sgdisk -n 1::+300M --typecode=1:ef00 --change-name=1:'EFIBOOT' $(DISK) 
+	sgdisk -n 2::-0 --typecode=2:8300 --change-name=2:'ROOT' $(DISK) 
 
 
 
 
 file_systems:
-#intentionally, sudo is missing	
-    mkfs.vfat -F32 -n "EFIBOOT" $$EFI
-    mkfs.btrfs -L ROOT $$ROOT -f
-    mount -t btrfs $$ROOT /mnt
+	mkfs.vfat -F32 -n "EFIBOOT" $(EFI)
+	mkfs.btrfs $(ROOT) -f
+	mount -t btrfs $(ROOT) /mnt
 	btrfs subvolume create /mnt/@
 	btrfs subvolume create /mnt/home
 	btrfs subvolume create /mnt/@var_log
@@ -43,20 +41,18 @@ file_systems:
 	btrfs subvolume create /mnt/@var_tmp
 	btrfs subvolume create /mnt/@snapshots
 	umount /mnt
-
 	mkdir /mnt/home 
 	mkdir /mnt/var
 	mkdir /mnt/var/log 
 	mkdir /mnt/var/cache 
 	mkdir /mnt/var/tmp
 	mkdir /mnt/.snapshots
-
-	mount -t btrfs -o $$BTRFS_OPTS,subvol=@  /mnt
-	mount -t btrfs -o $$BTRFS_OPTS,subvol=@home  /mnt/home
-	mount -t btrfs -o $$BTRFS_OPTS,subvol=@var_log  /mnt/var/log
-	mount -t btrfs -o $$BTRFS_OPTS,subvol=@var_cache  /mnt/var/cache
-	mount -t btrfs -o $$BTRFS_OPTS,subvol=@var_tmp  /mnt/var/tmp
-	mount -t btrfs -o $$BTRFS_OPTS,subvol=@snapshots  /mnt/.snapshots
+	mount -t btrfs -o $(BTRFS_OPTS),subvol=@  /mnt
+	mount -t btrfs -o $(BTRFS_OPTS),subvol=@home  /mnt/home
+	mount -t btrfs -o $(BTRFS_OPTS),subvol=@var_log  /mnt/var/log
+	mount -t btrfs -o $(BTRFS_OPTS),subvol=@var_cache  /mnt/var/cache
+	mount -t btrfs -o $(BTRFS_OPTS),subvol=@var_tmp  /mnt/var/tmp
+	mount -t btrfs -o $(BTRFS_OPTS),subvol=@snapshots  /mnt/.snapshots
 
 
 pacstrap:
@@ -66,7 +62,7 @@ pacstrap:
 	cp /etc/pacman.d/mirrorlist /mnt/etc/pacman.d/mirrorlist
 
 mount:
-	mount $$ROOT /mnt -o subvol=@
+	mount $(ROOT) /mnt -o subvol=@
 
 #now you need to do 
 #	arch-chroot /mnt 
@@ -76,29 +72,29 @@ mount:
 isnstall:
 	sed -i 's/^#en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen
 	locale-gen
-	timedatectl --no-ask-password set-timezone $$TIMEZONE
+	timedatectl --no-ask-password set-timezone $(TIMEZONE)
 	timedatectl --no-ask-password set-ntp 1
 	localectl --no-ask-password set-locale LANG="en_US.UTF-8" LC_TIME="en_US.UTF-8"
-	localectl --no-ask-password set-keymap $$KEYMAP
+	localectl --no-ask-password set-keymap $(KEYMAP)
 	sed -i 's/^# %wheel ALL=(ALL) NOPASSWD: ALL/%wheel ALL=(ALL) NOPASSWD: ALL/' /etc/sudoers
 #Add parallel downloading
 	sed -i 's/^#ParallelDownloads/ParallelDownloads/' /etc/pacman.conf
 #Enable multilib
 	sed -i "/\[multilib\]/,/Include/"'s/^#//' /etc/pacman.conf
 	pacman -Sy --noconfirm
-    groupadd libvirt
-    useradd -m -G wheel,libvirt -s /bin/bash $$USER 
-	cp -R /root/Makefile /home/$$USER/
-    chown -R $$USER: /home/$$USER
-	echo $$NAME > /etc/hostname
+	groupadd libvirt
+	useradd -m -G wheel,libvirt -s /bin/bash $(USER) 
+	cp -R /root/Makefile /home/$(USER)/
+	chown -R $(USER): /home/$(USER)
+	echo $(NAME) > /etc/hostname
 
 
 hardware:
 #Uncomment per your hardware:
 #	pacman -S --noconfirm intel-ucode
-	pacman -S --noconfirm amd-ucode
+#pacman -S --noconfirm amd-ucode
 #   pacman -S nvidia --noconfirm --needed && nvidia-xconfig
-    pacman -S xf86-video-amdgpu --noconfirm --needed
+#pacman -S xf86-video-amdgpu --noconfirm --needed
 #    pacman -S libva-intel-driver libvdpau-va-gl lib32-vulkan-intel vulkan-intel libva-intel-driver libva-utils lib32-mesa --needed --noconfirm
 
 yay:
@@ -168,7 +164,6 @@ kde: x
 	sudo pacman -S --noconfirm --needed plasma kde-gtk-config kmix 
 
 gnome: x
-
 	sudo pacman -S --noconfirm --needed gnome gnome-tweaks gnome-shell-extension-appindicator base-devel
 	yay -S --noconfirm --needed gnome-shell-extension-arc-menu gnome-shell-extension-dash-to-panel-git gnome-shell-extension-custom-hot-corners-extended
 
@@ -181,7 +176,7 @@ vmware:
 	sudo systemctl enable vmware-networks
 
 powerlink:
-	touch "$$HOME/.cache/zshhistory"
+	touch "$(HOME)/.cache/zshhistory"
 	git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ~/powerlevel10k
 	echo 'source ~/powerlevel10k/powerlevel10k.zsh-theme' >> ~/.zshrc
 
@@ -200,7 +195,7 @@ vnc :
 	sudo pacman -S --noconfirm --needed tigervnc
 	echo geometry=1920x1080 > ~/.vnc/config
 	echo alwaysshared >> ~/.vnc/config
-	sudo sh -c "echo :1=$$USER >>  /etc/tigervnc/vncserver.users"
+	sudo sh -c "echo :1=$(USER) >>  /etc/tigervnc/vncserver.users"
 	sudo systemctl enable vncserver@:1.service
 	sudo systemctl start vncserver@:1.service
 
