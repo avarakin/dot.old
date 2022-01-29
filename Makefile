@@ -97,10 +97,6 @@ nox:
 	pacman -S --noconfirm --needed vim mc htop neofetch networkmanager ntp p7zip \
 	rsync snapper sudo unrar openssh unzip usbutils wget zsh zsh-syntax-highlighting zsh-autosuggestions \
 	net-tools inetutils
-	systemctl enable --now ntpd.service
-	systemctl enable --now sshd
-	systemctl enable --now NetworkManager.service
-
 
 grub:
 	mkdir -p /boot/efi
@@ -113,6 +109,11 @@ grub:
 ##########################
 # Rest of the install
 ##########################
+services:
+	systemctl enable --now ntpd.service
+	systemctl enable --now sshd
+	systemctl enable --now NetworkManager.service
+	systemctl enable --now systemd-resolved
 
 yay:
 	git clone "https://aur.archlinux.org/yay.git" && cd ~/yay && makepkg -si --noconfirm
