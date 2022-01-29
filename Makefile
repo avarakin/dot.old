@@ -7,6 +7,7 @@ USER=alex
 NAME=PC
 TIMEZONE=America/New_York
 KEYMAP=-us
+BTRFS_OPTS=defaults,noatime,compress=zstd,ssd,autodefrag
 
 speedup:
 	sed -i 's/^#ParallelDownloads/ParallelDownloads/' /etc/pacman.conf
@@ -28,15 +29,35 @@ prepare_disk:
 	sgdisk -n 2::-0 --typecode=3:8300 --change-name=2:'ROOT' $$DISK # partition  (Root), default start, remaining
 
 
-format:
+
+
+file_systems:
 #intentionally, sudo is missing	
     mkfs.vfat -F32 -n "EFIBOOT" $$EFI
     mkfs.btrfs -L ROOT $$ROOT -f
     mount -t btrfs $$ROOT /mnt
-	ls /mnt | xargs btrfs subvolume delete
 	btrfs subvolume create /mnt/@
+	btrfs subvolume create /mnt/home
+	btrfs subvolume create /mnt/@var_log
+	btrfs subvolume create /mnt/@var_cache
+	btrfs subvolume create /mnt/@var_tmp
+	btrfs subvolume create /mnt/@snapshots
 	umount /mnt
-	mount -t btrfs -o noatime,compress=zstd,ssd,subvol=@ -L ROOT /mnt
+
+	mkdir /mnt/home 
+	mkdir /mnt/var
+	mkdir /mnt/var/log 
+	mkdir /mnt/var/cache 
+	mkdir /mnt/var/tmp
+	mkdir /mnt/.snapshots
+
+	mount -t btrfs -o $$BTRFS_OPTS,subvol=@  /mnt
+	mount -t btrfs -o $$BTRFS_OPTS,subvol=@home  /mnt/home
+	mount -t btrfs -o $$BTRFS_OPTS,subvol=@var_log  /mnt/var/log
+	mount -t btrfs -o $$BTRFS_OPTS,subvol=@var_cache  /mnt/var/cache
+	mount -t btrfs -o $$BTRFS_OPTS,subvol=@var_tmp  /mnt/var/tmp
+	mount -t btrfs -o $$BTRFS_OPTS,subvol=@snapshots  /mnt/.snapshots
+
 
 pacstrap:
 	pacstrap /mnt base base-devel linux linux-firmware vim make nano sudo archlinux-keyring wget libnewt --noconfirm --needed
