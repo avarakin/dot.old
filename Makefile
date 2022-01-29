@@ -56,7 +56,7 @@ file_systems:
 
 
 pacstrap:
-	pacstrap /mnt base base-devel linux linux-firmware vim make zsh nano sudo archlinux-keyring wget libnewt grub git efibootmgr arch-install-scripts --noconfirm --needed
+	pacstrap /mnt base base-devel linux linux-firmware vim networkmanager make zsh nano sudo archlinux-keyring wget libnewt grub git efibootmgr arch-install-scripts --noconfirm --needed
 	echo "keyserver hkp://keyserver.ubuntu.com" >> /mnt/etc/pacman.d/gnupg/gpg.conf
 	cp -R Makefile /mnt/root
 	cp /etc/pacman.d/mirrorlist /mnt/etc/pacman.d/mirrorlist
@@ -92,8 +92,15 @@ config:
 #pacman -S xf86-video-amdgpu --noconfirm --needed
 	pacman -S libva-intel-driver libvdpau-va-gl lib32-vulkan-intel vulkan-intel libva-intel-driver libva-utils lib32-mesa --needed --noconfirm
 
-yay:
-	git clone "https://aur.archlinux.org/yay.git" && cd ~/yay && makepkg -si --noconfirm
+
+nox:
+	pacman -S --noconfirm --needed vim mc htop neofetch networkmanager ntp p7zip \
+	rsync snapper sudo unrar openssh unzip usbutils wget zsh zsh-syntax-highlighting zsh-autosuggestions \
+	net-tools inetutils
+	systemctl enable --now ntpd.service
+	systemctl enable --now sshd
+	systemctl enable --now NetworkManager.service
+
 
 grub:
 	mkdir -p /boot/efi
@@ -107,15 +114,11 @@ grub:
 # Rest of the install
 ##########################
 
-nox:  git
-	sudo pacman -S --noconfirm --needed vim mc htop neofetch networkmanager ntp p7zip \
-	rsync snapper sudo unrar openssh unzip usbutils wget zsh zsh-syntax-highlighting zsh-autosuggestions \
-	net-tools inetutils
-	sudo systemctl enable --now ntpd.service
-	sudo systemctl enable --now sshd
-	sudo systemctl enable --now NetworkManager.service
+yay:
+	git clone "https://aur.archlinux.org/yay.git" && cd ~/yay && makepkg -si --noconfirm
 
-base: nox scripts mate
+
+base: yay scripts mate
 	sudo pacman -S --noconfirm --needed terminator geeqie flameshot arduino tilda syncthing ttf-inconsolata remmina gparted emacs pulseaudio \
 	terminus-font ttf-droid ttf-hack ttf-roboto 
 	#yay -S --noconfirm --needed nomachine
