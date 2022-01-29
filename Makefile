@@ -6,7 +6,7 @@ ROOT=/dev/sda2
 USER=alex
 NAME=zbox
 TIMEZONE=America/New_York
-KEYMAP=-us
+KEYMAP=us
 BTRFS_OPTS=defaults,noatime,compress=zstd,ssd,autodefrag
 
 speedup:
@@ -56,7 +56,7 @@ file_systems:
 
 
 pacstrap:
-	pacstrap /mnt base base-devel linux linux-firmware vim make nano sudo archlinux-keyring wget libnewt --noconfirm --needed
+	pacstrap /mnt base base-devel linux linux-firmware vim make zsh nano sudo archlinux-keyring wget libnewt grub git efibootmgr arch-install-scripts --noconfirm --needed
 	echo "keyserver hkp://keyserver.ubuntu.com" >> /mnt/etc/pacman.d/gnupg/gpg.conf
 	cp -R Makefile /mnt/root
 	cp /etc/pacman.d/mirrorlist /mnt/etc/pacman.d/mirrorlist
@@ -66,7 +66,7 @@ pacstrap:
 #	cd /root
 #and continue with rest of the steps
 
-isnstall:
+config:
 	sed -i 's/^#en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen
 	locale-gen
 	timedatectl --no-ask-password set-timezone $(TIMEZONE)
@@ -79,28 +79,27 @@ isnstall:
 #Enable multilib
 	sed -i "/\[multilib\]/,/Include/"'s/^#//' /etc/pacman.conf
 	pacman -Sy --noconfirm
-	groupadd libvirt
-	useradd -m -G wheel,libvirt -s /bin/bash $(USER) 
+	-groupadd libvirt
+	-useradd -m -G wheel,libvirt -s /bin/zsh $(USER) 
 	cp -R /root/Makefile /home/$(USER)/
 	chown -R $(USER): /home/$(USER)
+	passwd $(USER)
 	echo $(NAME) > /etc/hostname
-
-
-hardware:
 #Uncomment per your hardware:
-#	pacman -S --noconfirm intel-ucode
-#pacman -S --noconfirm amd-ucode
+	pacman -S --noconfirm intel-ucode
+#	pacman -S --noconfirm amd-ucode
 #   pacman -S nvidia --noconfirm --needed && nvidia-xconfig
 #pacman -S xf86-video-amdgpu --noconfirm --needed
-#    pacman -S libva-intel-driver libvdpau-va-gl lib32-vulkan-intel vulkan-intel libva-intel-driver libva-utils lib32-mesa --needed --noconfirm
+	pacman -S libva-intel-driver libvdpau-va-gl lib32-vulkan-intel vulkan-intel libva-intel-driver libva-utils lib32-mesa --needed --noconfirm
 
 yay:
 	git clone "https://aur.archlinux.org/yay.git" && cd ~/yay && makepkg -si --noconfirm
 
 grub:
-	yay -S --noconfirm --needed update-grub
-	grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=GRUB
-	sudo update-grub
+	mkdir -p /boot/efi
+	-mount /dev/sda1 /boot/efi
+	grub-install --target=x86_64-efi --efi-directory=/boot/efi --bootloader-id=GRUB
+	grub-mkconfig -o /boot/grub/grub.cfg
 	genfstab -U / >> /etc/fstab
 
 
