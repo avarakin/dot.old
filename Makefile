@@ -1,5 +1,3 @@
-all: base astro vnc wap
-
 DISK=/dev/sda
 EFI=/dev/sda1
 ROOT=/dev/sda2
@@ -8,6 +6,18 @@ NAME=zbox
 TIMEZONE=America/New_York
 KEYMAP=us
 BTRFS_OPTS=defaults,noatime,compress=zstd,ssd,autodefrag
+
+# Install software as regular user with sudo access
+software: base astro vnc wap
+
+# install base system using Arch installer. 
+# Attention: It will wipe out the whole disk
+install_base: speedup prepare_disk file_systems pacstrap
+
+# Once base is installed, we need to chroot-arch and run the rest of the base install
+in_chroot: config utils services grub
+
+
 
 speedup:
 	sed -i 's/^#ParallelDownloads/ParallelDownloads/' /etc/pacman.conf
@@ -93,10 +103,17 @@ config:
 	pacman -S libva-intel-driver libvdpau-va-gl lib32-vulkan-intel vulkan-intel libva-intel-driver libva-utils lib32-mesa --needed --noconfirm
 
 
-nox:
+utils:
 	pacman -S --noconfirm --needed vim mc htop neofetch networkmanager ntp p7zip \
 	rsync snapper sudo unrar openssh unzip usbutils wget zsh zsh-syntax-highlighting zsh-autosuggestions \
-	net-tools inetutils
+	net-tools inetutils archlinux-keyring
+
+services:
+	systemctl enable ntpd.service
+	systemctl enable sshd
+	systemctl enable NetworkManager.service
+	systemctl enable systemd-resolved
+
 
 grub:
 	mkdir -p /boot/efi
@@ -109,12 +126,6 @@ grub:
 ##########################
 # Rest of the install
 ##########################
-services:
-	systemctl enable --now ntpd.service
-	systemctl enable --now sshd
-	systemctl enable --now NetworkManager.service
-	systemctl enable --now systemd-resolved
-
 yay:
 	git clone "https://aur.archlinux.org/yay.git" && cd ~/yay && makepkg -si --noconfirm
 
