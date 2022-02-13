@@ -194,6 +194,8 @@ powerlink:
 scripts:
 	mkdir -p ~/.local/share/nemo/scripts
 	cp resize_for_CN ~/.local/share/nemo/scripts
+	mkdir -p ~/.local/share/kservices5/ServiceMenus
+	cp  resize_for_cn.desktop ~/.local/share/kservices5/ServiceMenus/ 
 
 git:
 	git config --global user.email "avarakin@gmail.com"

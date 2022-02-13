@@ -176,6 +176,9 @@ awful.util.tasklist_buttons = mytable.join(
 
 beautiful.init(string.format("%s/.config/awesome/themes/%s/theme.lua", os.getenv("HOME"), chosen_theme))
 
+--local nice = require("nice")
+--nice()
+
 -- }}}
 
 -- {{{ Menu
@@ -695,6 +698,10 @@ awful.rules.rules = {
     { rule_any = {name = {'Code'}}, properties = {tag = "Dev"} },
     { rule_any = {name = {'VNC Viewer'}}, properties = {tag = "Astro"} },
   
+--    { rule_any = {class = {'kstars'}}, properties = {placement = awful.placement.no_overlap+awful.placement.no_offscreen} },
+--    { rule_any = {class = {'kstars'}}, properties = {type = "normal",  ontop=false, avove=false, modal=false, is_fixed = false , placement = awful.placement.no_overlap+awful.placement.no_offscreen } },
+
+    --floating = true,
 
     -- Set Firefox to always map on the tag named "2" on screen 1.
     -- { rule = { class = "Firefox" },
