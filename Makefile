@@ -130,7 +130,7 @@ yay:
 	git clone "https://aur.archlinux.org/yay.git" && cd ~/yay && makepkg -si --noconfirm
 
 
-base: yay scripts mate
+base: scripts mate
 	sudo pacman -S --noconfirm --needed terminator geeqie flameshot arduino tilda syncthing ttf-inconsolata remmina gparted emacs pulseaudio \
 	terminus-font ttf-droid ttf-hack ttf-roboto 
 	#yay -S --noconfirm --needed nomachine
@@ -206,6 +206,7 @@ git:
 #configure tigervnc 
 vnc :
 	sudo pacman -S --noconfirm --needed tigervnc
+	vncpasswd
 	echo geometry=1920x1080 > ~/.vnc/config
 	echo alwaysshared >> ~/.vnc/config
 	sudo sh -c "echo :1=$(USER) >>  /etc/tigervnc/vncserver.users"
@@ -217,7 +218,7 @@ wap :
 	yay -S --noconfirm --needed create_ap-git
 	sudo sed -i.bak 's/SSID=MyAccessPoint/SSID=zbox/'  /etc/create_ap.conf
 	sudo sed -i.bak 's/PASSPHRASE=12345678/PASSPHRASE=password/'  /etc/create_ap.conf
-	sudo sed -i.bak 's/SSID=INTERNET_IFACE=eth0/INTERNET_IFACE=enp2s0/'  /etc/create_ap.conf
+	sudo sed -i.bak 's/INTERNET_IFACE=eth0/INTERNET_IFACE=enp2s0/'  /etc/create_ap.conf
 	sudo sed -i.bak 's/NO_VIRT=0/NO_VIRT=1/'  /etc/create_ap.conf
 	sudo sed -i.bak 's/WIFI_IFACE=wlan0/WIFI_IFACE=wlp3s0/'  /etc/create_ap.conf
 	sudo systemctl enable create_ap
