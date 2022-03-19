@@ -134,6 +134,7 @@ base: scripts mate
 	sudo pacman -S --noconfirm --needed terminator geeqie flameshot arduino tilda syncthing ttf-inconsolata remmina gparted emacs pulseaudio \
 	terminus-font ttf-droid ttf-hack ttf-roboto 
 	#yay -S --noconfirm --needed nomachine
+	sudo systemctl enable --now syncthing@$(USER).service
 	-yay -S --noconfirm --needed octopi 
 	-yay -S --noconfirm --needed ttf-envy-code-r 
 	-yay -S --noconfirm --needed gooogle-chrome 
