@@ -226,3 +226,11 @@ wap :
 	sudo systemctl start create_ap
 	sleep 5
 	sudo systemctl status create_ap
+
+
+astrodmx:
+	wget https://www.astrodmx-capture.org.uk/sites/downloads/astrodmx/current/x86-64/astrodmx-capture_1.4.2.1_x86-64-manual.tar.gz
+	tar zxvf astrodmx-capture_1.4.2.1_x86-64-manual.tar.gz
+
+astap:
+	wget https://versaweb.dl.sourceforge.net/project/astap-program/linux_installer/astap_amd64.tar.gz
