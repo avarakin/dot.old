@@ -151,18 +151,26 @@ desktop:
 	sudo pacman -S --noconfirm --needed rawtherapee cura system-config-printer gimp 
 	systemctl enable cups.service
 
-astro:
+astro: astrometry _ccdciel
 	sudo pacman -S --noconfirm --needed kstars breeze-icons binutils patch  libraw libindi gpsd gcc
 	-yay -S --nobatchinstall --noconfirm --needed libindi_3rdparty 
-	-yay -S --nobatchinstall --noconfirm --needed sextractor-bin 
-	-yay -S --nobatchinstall --noconfirm --needed astrometry.net 
 	-yay -S --nobatchinstall --noconfirm --needed phd2 
 	#-yay -S --nobatchinstall --noconfirm --needed ccdciel
+
+astrometry:
+	-yay -S --nobatchinstall --noconfirm --needed sextractor-bin 
+	-yay -S --nobatchinstall --noconfirm --needed astrometry.net
+	#looks like astrometry is installed in the wrong place, so creating a symlink to the right place
+	-sudo ln -s /usr/lib/python/site-packages/astrometry /usr/lib/python3.10/site-packages
 	wget broiler.astrometry.net/~dstn/4100/index-4107.fits
 	wget broiler.astrometry.net/~dstn/4100/index-4108.fits
 	wget broiler.astrometry.net/~dstn/4100/index-4109.fits
 	sudo mv index-410[789].fits /usr/share/astrometry/data
-	cd ccdciel && makepkg && sudo pacman -U --noconfirm  ccdciel-0.9.76-1-x86_64.pkg.tar.zst
+
+_ccdciel:
+	yay -S --nobatchinstall --noconfirm --needed libpasastro
+	cd ccdciel && makepkg && sudo pacman -U --noconfirm  ccdciel-0.9.78-1-x86_64.pkg.tar.xz
+
 
 x:
 	sudo pacman -S --noconfirm --needed mesa xorg xorg-server xorg-apps xorg-drivers xorg-xkill xorg-xinit
