@@ -135,6 +135,9 @@ base: scripts mate
 	terminus-font ttf-droid ttf-hack ttf-roboto 
 	#yay -S --noconfirm --needed nomachine
 	sudo systemctl enable --now syncthing@$(USER).service
+	#needed for Arduino ESP32
+	pip3 install pyserial
+	sudo usermod -a -G uucp $(USER)
 	-yay -S --noconfirm --needed octopi 
 	-yay -S --noconfirm --needed ttf-envy-code-r 
 	-yay -S --noconfirm --needed gooogle-chrome 
