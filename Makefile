@@ -162,7 +162,7 @@ kstars:
 
 indi:
 	sudo pacman -S --noconfirm --needed binutils patch libraw libindi gpsd gcc
-	-yay -S --nobatchinstall --noconfirm --needed libindi_3rdparty 
+	-yay -S --nobatchinstall --noconfirm --needed libindi_3rdparty libindi-asi 
 
 phd:
 	-yay -S --nobatchinstall --noconfirm --needed phd2 
@@ -181,7 +181,7 @@ astrometry:
 .PHONY: ccdciel
 ccdciel:
 	yay -S --nobatchinstall --noconfirm --needed libpasastro
-	cd ccdciel && makepkg && sudo pacman -U --noconfirm  ccdciel/ccdciel-0.9.78-1-x86_64.pkg.tar.zst
+	cd ccdciel && makepkg  --noconfirm --needed  -sric && rm -f  *.xz *.zst
 
 
 x:
