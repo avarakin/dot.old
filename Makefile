@@ -7,6 +7,7 @@ TIMEZONE=America/New_York
 KEYMAP=us
 BTRFS_OPTS=defaults,noatime,compress=zstd,ssd,autodefrag
 
+
 # Install software as regular user with sudo access
 software: base astro vnc wap
 
@@ -154,11 +155,17 @@ desktop:
 	sudo pacman -S --noconfirm --needed rawtherapee cura system-config-printer gimp 
 	systemctl enable cups.service
 
-astro: astrometry _ccdciel
-	sudo pacman -S --noconfirm --needed kstars breeze-icons binutils patch  libraw libindi gpsd gcc
+astro: indi phd kstars astrometry ccdciel
+
+kstars:
+	sudo pacman -S --noconfirm --needed kstars breeze-icons
+
+indi:
+	sudo pacman -S --noconfirm --needed binutils patch libraw libindi gpsd gcc
 	-yay -S --nobatchinstall --noconfirm --needed libindi_3rdparty 
+
+phd:
 	-yay -S --nobatchinstall --noconfirm --needed phd2 
-	#-yay -S --nobatchinstall --noconfirm --needed ccdciel
 
 astrometry:
 	-yay -S --nobatchinstall --noconfirm --needed sextractor-bin 
@@ -170,9 +177,11 @@ astrometry:
 	wget broiler.astrometry.net/~dstn/4100/index-4109.fits
 	sudo mv index-410[789].fits /usr/share/astrometry/data
 
-_ccdciel:
+
+.PHONY: ccdciel
+ccdciel:
 	yay -S --nobatchinstall --noconfirm --needed libpasastro
-	cd ccdciel && makepkg && sudo pacman -U --noconfirm  ccdciel-0.9.78-1-x86_64.pkg.tar.xz
+	cd ccdciel && makepkg && sudo pacman -U --noconfirm  ccdciel/ccdciel-0.9.78-1-x86_64.pkg.tar.zst
 
 
 x:
