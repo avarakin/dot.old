@@ -1,0 +1,19 @@
+# Maintainer: avarakin
+
+pkgname=h18-star-database-astap
+pkgver=2022.04.01
+pkgrel=1
+pkgdesc="For the internal astrometric solver of astap. Contains stars up to magnitude 18."
+arch=('i686' 'x86_64')
+url="http://www.hnsky.org/astap.htm"
+license=('GPL')
+depends=('astap-bin')
+source=("https://sourceforge.net/projects/astap-program/files/star_databases/h18_star_database_mag18_astap.deb/download")
+sha1sums=('c34ad5f2f2a7c1b30e27d8fd0d35ca8f334b70f3')
+
+
+package() {
+  bsdtar -xf data.tar.xz -C "$pkgdir"
+  cd "${pkgdir}"
+  chmod 755 opt/
+}

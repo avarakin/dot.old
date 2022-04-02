@@ -155,7 +155,7 @@ desktop:
 	sudo pacman -S --noconfirm --needed rawtherapee cura system-config-printer gimp 
 	systemctl enable cups.service
 
-astro: indi phd kstars astrometry ccdciel
+astro: indi phd kstars astrometry ccdciel astap astap_star_db
 
 kstars:
 	sudo pacman -S --noconfirm --needed kstars breeze-icons
@@ -182,6 +182,9 @@ astrometry:
 ccdciel:
 	yay -S --nobatchinstall --noconfirm --needed libpasastro
 	cd ccdciel && makepkg  --noconfirm --needed  -sric && rm -f  *.xz *.zst
+
+astap_star_db:
+	cd h18_star_db && makepkg --noconfirm --needed  -sric && rm -f  *.deb download  *.zst
 
 
 x:
@@ -253,4 +256,5 @@ astrodmx:
 	tar zxvf astrodmx-capture_1.4.2.1_x86-64-manual.tar.gz
 
 astap:
-	wget https://versaweb.dl.sourceforge.net/project/astap-program/linux_installer/astap_amd64.tar.gz
+	yay --noconfirm --needed  --mflags --skipchecksums -S astap-bin
+
