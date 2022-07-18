@@ -8,8 +8,18 @@ KEYMAP=us
 BTRFS_OPTS=defaults,noatime,compress=zstd,ssd,autodefrag
 
 
+
+# Steps for installing from scratch:
+# Ensure that you are booted as UEFI
+# make install_base
+# arch-chroot /mnt
+# cd /root && make in_chroot
+# reboot
+# cd && make software
+
+
 # Install software as regular user with sudo access
-software: base astro vnc wap
+software: yay powerlink base kde vnc
 
 # install base system using Arch installer. 
 # Attention: It will wipe out the whole disk
@@ -131,9 +141,9 @@ yay:
 	git clone "https://aur.archlinux.org/yay.git" && cd ~/yay && makepkg -si --noconfirm
 
 
-base: scripts mate
-	sudo pacman -S --noconfirm --needed terminator geeqie flameshot arduino tilda syncthing ttf-inconsolata remmina gparted emacs pulseaudio \
-	terminus-font ttf-droid ttf-hack ttf-roboto 
+base:
+	sudo pacman -S --noconfirm --needed terminator geeqie flameshot arduino tilda syncthing ttf-inconsolata remmina  libvncserver gparted emacs pulseaudio \
+	terminus-font ttf-droid ttf-hack ttf-roboto python-pip 
 	#yay -S --noconfirm --needed nomachine
 	sudo systemctl enable --now syncthing@$(USER).service
 	#needed for Arduino ESP32
@@ -168,14 +178,14 @@ phd:
 	-yay -S --nobatchinstall --noconfirm --needed phd2 
 
 astrometry:
-	-yay -S --nobatchinstall --noconfirm --needed sextractor-bin 
-	-yay -S --nobatchinstall --noconfirm --needed astrometry.net
+	#-yay -S --nobatchinstall --noconfirm --needed sextractor-bin 
+	#-yay -S --nobatchinstall --noconfirm --needed astrometry.net
 	#looks like astrometry is installed in the wrong place, so creating a symlink to the right place
-	-sudo ln -s /usr/lib/python/site-packages/astrometry /usr/lib/python3.10/site-packages
-	wget broiler.astrometry.net/~dstn/4100/index-4107.fits
-	wget broiler.astrometry.net/~dstn/4100/index-4108.fits
-	wget broiler.astrometry.net/~dstn/4100/index-4109.fits
-	sudo mv index-410[789].fits /usr/share/astrometry/data
+	#-sudo ln -s /usr/lib/python/site-packages/astrometry /usr/lib/python3.10/site-packages
+	#wget broiler.astrometry.net/~dstn/4100/index-4107.fits
+	#wget broiler.astrometry.net/~dstn/4100/index-4108.fits
+	#wget broiler.astrometry.net/~dstn/4100/index-4109.fits
+	#sudo mv index-410[789].fits /usr/share/astrometry/data
 
 
 .PHONY: ccdciel
